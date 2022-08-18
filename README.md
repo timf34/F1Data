@@ -1,0 +1,1 @@
+Just `pip install fastf1`
