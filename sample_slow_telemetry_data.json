@@ -1,0 +1,28 @@
+{
+  "DriverList":
+    {
+      "44": {
+        "RacingNumber":"44",
+        "BroadcastName":"L HAMILTON",
+        "FullName":"Lewis HAMILTON",
+        "Tla":"HAM","Line":1,
+        "TeamName":"Mercedes",
+        "FirstName":"Lewis",
+        "LastName":"Hamilton"
+      },
+      "33":{
+        "RacingNumber":"33",
+        "BroadcastName":"M VERSTAPPEN",
+        "FullName":"Max VERSTAPPEN",
+        "Tla":"VER","Line":7,
+        "TeamName":"Red Bull Racing",
+        "FirstName":"Max",
+        "LastName":"Verstappen"}
+    },
+  "RaceInformation" :
+    {
+      "RaceName":"Super whatever",
+      "RaceCircuit":"Okayama",
+      "Date":"15-09-2022"
+    }
+}

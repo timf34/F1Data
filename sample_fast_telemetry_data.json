@@ -1,0 +1,56 @@
+// This is the info that needs to be updated quickly.
+
+// I also need to include fastest lap time information, etc.
+{
+  "okaayama_race_data": {
+    "timestamp" : "1.022",
+    "rankings": {
+      "1": {
+        "car_number": 22
+      },
+      "2": {
+        "car_number": 23
+      },
+      "3": {
+        "car_number": 24
+      },
+      "4": {
+        "car_number": 25
+      },
+      "5": {
+        "car_number": 26
+      },
+      "6": {
+        "car_number": 27
+      },
+      "7": {
+        "car_number": 28
+      },
+      "8": {
+        "car_number": 29
+      }
+    },
+    "car_data": {
+      "24" : {
+        "rank": 3,
+        "speed": "1.0",
+        "acceleration": "0.0",
+        "cornering": "False",
+        "braking": "False",
+        "x_pos": "125.0",
+        "y_pos": "69.0",
+        "z_pos": "1.2"
+      },
+      "22" : {
+        "rank": 1,
+        "speed": "1.0",
+        "acceleration": "0.0",
+        "cornering": "False",
+        "braking": "False",
+        "x_pos": "128.0",
+        "y_pos": "79.0",
+        "z_pos": "1.1"
+      }
+    }
+  }
+}
