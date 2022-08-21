@@ -1,0 +1,29 @@
+max x 2334
+max y 3789
+max z 1923
+min x -8796
+min y -8875
+min z 0
+mean x -2084.2477433110685
+mean y -1773.1650628325597
+mean z 1324.6049718857316
+median x -1034.0
+median y 0.0
+median z 1721.0
+mode x 0
+mode y 0
+mode z 0
+variance x 7900135.82651492
+variance y 12727148.689416569
+variance z 598163.0056079563
+standard deviation x 2810.7180268598486
+standard deviation y 3567.512955746141
+standard deviation z 773.4099854591718
+range x 11130
+range y 12664
+range z 1923
+midrange x -3231.0
+midrange y -2543.0
+midrange z 961.5
+
+
