@@ -42,9 +42,7 @@
         "cornering": "False",
         "rpm" : 3600,
         "braking": "False",
-        "x_pos": "125.0",
-        "y_pos": "69.0",
-        "z_pos": "1.2"
+        "leadTime" : 7.2
       },
       "22" : {
         "rank": 1,
@@ -55,9 +53,7 @@
         "cornering": "False",
         "rpm" : 3500,
         "braking": "False",
-        "x_pos": "128.0",
-        "y_pos": "79.0",
-        "z_pos": "1.1"
+        "leadTime" : 0
       }
     }
   }
