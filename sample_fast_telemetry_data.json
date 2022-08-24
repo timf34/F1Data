@@ -42,7 +42,8 @@
         "cornering": "False",
         "rpm" : 3600,
         "braking": "False",
-        "leadTime" : 7.2
+        "leadTime" : 7.2,
+        "leadDistance" : 0  // This would be inferred/ integrated using the speed. We might have to keep a bit of memory (i.e. last 30 seconds history of car speed)
       },
       "22" : {
         "rank": 1,
@@ -54,6 +55,7 @@
         "rpm" : 3500,
         "braking": "False",
         "leadTime" : 0
+        "leadDistance" : 3.3
       }
     }
   }
