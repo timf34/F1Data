@@ -23,6 +23,9 @@
     {
       "RaceName":"Super whatever",
       "RaceCircuit":"Okayama",
-      "Date":"15-09-2022"
+      "Date":"15-09-2022",
+      "TimeBasedRace" : "True",
+      "TotalTime" : "3 hours",
+      "TotalLaps" : 0
     }
 }
