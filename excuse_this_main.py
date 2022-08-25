@@ -274,11 +274,25 @@ def trying_calculate_distance_between_two_cars() -> None:
     calculate_distance_between_two_cars(a1, a2)
 
 
+def get_timing_data():
+    print("Printing session attributes")
+    print(session.__dict__)
+
+    laps_data, stream_data = fastf1.api.timing_data(session.api_path)
+    print("Printing laps data")
+    print(laps_data)
+
+    print("Printing stream data")
+    print(stream_data)
+
+
+
 if __name__ == '__main__':
     # convert_car_pos_data_dict()
     # using_iterrows()
     # using_next_simple()
     # using_next_for_all_cars()
     # create_file_with_jsons()
-    trying_calculate_distance_between_two_cars()
+    # trying_calculate_distance_between_two_cars()
+    get_timing_data()
 
