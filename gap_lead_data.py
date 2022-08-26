@@ -76,31 +76,31 @@ def iterate_over_timing_data(stream_data: pandas.DataFrame, file = None) -> None
             last_state = less_than_half
             if file is not None:
                 json.dump(stats, file, indent=4)
+                file.write("\n")
             stats = {}  # Reset the stats dictionary.
 
         # Fill in the stats dictionary
         # Just use the last timestep before the .5 and .0 mark for now, but come back to clean this up.
         # We want the timesteps to be in 0.5 intervals, and also to allow for cases where the gap between timestamps
         # is greater than 1 second.
-        stats["timestamp"] = row['Time'].total_seconds()
-        stats["car_number"] = row['Driver']
-        stats["gap_to_leader"] = row['GapToLeader']
-        stats["gap_to_postiion_ahead"] = row['IntervalToPositionAhead']
+
+        # Total seconds, rounded down.
+        total_seconds = math.floor(row['Time'].total_seconds())
+        if less_than_half is not True:
+            total_seconds += 0.5
 
 
-
-        # print(row)
-        # stats["timestamp"] = row['Time'].total_seconds()
-        # print("Here is the row \n", row)
-        # print("Here is the index\n", index)
-        # count += 1
-        # if int((row['Time'].total_seconds() * 10) % 10) <= 4:  # This would exclude all times between 0.5 and 0.999 rn
-        #     # Note that by placing this here, we would still get the car that is the first one to be greater than 0.5
-        #     # which is a bit of an issue. I am sure there is a smarter way to do this, but I will leave it like this for now
-        #     # Note that I should also include the real timesteps in the dictionary to help with debugging.
-        #     print(stats)
-        #     stats = {}
-
+        # This is just to handle reinitialization of the stats dictionary.
+        stats["timestamp"] = total_seconds
+        try:
+            stats["car_number"][row['Driver']] = {}
+            stats["car_number"][row['Driver']]["gap_to_leader"] = row['GapToLeader']
+            stats["car_number"][row['Driver']]["gap_to_postiion_ahead"] = row['IntervalToPositionAhead']
+        except:
+            stats["car_number"] = {}
+            stats["car_number"][row['Driver']] = {}
+            stats["car_number"][row['Driver']]["gap_to_leader"] = row['GapToLeader']
+            stats["car_number"][row['Driver']]["gap_to_postiion_ahead"] = row['IntervalToPositionAhead']
 
     print(stats)
 
