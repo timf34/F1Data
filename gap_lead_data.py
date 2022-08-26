@@ -37,9 +37,12 @@ def print_pandas_dataframe_info(dataframe: pandas.DataFrame) -> None:
     print("dataframe sorted by Time: \n", dataframe.sort_values(by='Time')[3000:3040], "\n")
 
 
-def get_timing_data(sorted: bool = True) -> pandas.DataFrame:
+def get_timing_data(sorted: bool = True, short: bool = False) -> pandas.DataFrame:
     """
     # https://theoehrly.github.io/Fast-F1/api.html#fastf1.api.timing_data
+
+    :param sorted: Whether to sort the data by time.
+    :param short: Whether to return a sliced version of the dataset (a fraction of it) or not
     :return:
         ~~(DataFrame, DataFrame): The first DataFrame is the lap data, the second's the stream_data (with gap times!)~~
         DataFrame: We will just return the streaming data actually to make things easier for now
@@ -47,10 +50,16 @@ def get_timing_data(sorted: bool = True) -> pandas.DataFrame:
     """
     if sorted:
         print("Getting sorted timing data")
-        return fastf1.api.timing_data(session.api_path)[1].sort_values('Time')[1000:1040]
+        if short:
+            return fastf1.api.timing_data(session.api_path)[1].sort_values('Time')[1000:1040]
+        else:
+            return fastf1.api.timing_data(session.api_path)[1].sort_values('Time')
     else:
         print("Getting unsorted timing data")
-        return fastf1.api.timing_data(session.api_path)[1]
+        if short:
+            return fastf1.api.timing_data(session.api_path)[1][1000:1040]
+        else:
+            return fastf1.api.timing_data(session.api_path)[1]
 
 
 def iterate_over_timing_data(stream_data: pandas.DataFrame, file = None) -> None:
@@ -72,7 +81,8 @@ def iterate_over_timing_data(stream_data: pandas.DataFrame, file = None) -> None
         if less_than_half != last_state:
             # We have changed to the next half second.
             # Do logic here
-            print("We have changed to the next half second.")
+            # TODO: add tests to ensure this is working. For everything really
+            # print("We have changed to the next half second.")
             last_state = less_than_half
             if file is not None:
                 json.dump(stats, file, indent=4)
@@ -89,7 +99,8 @@ def iterate_over_timing_data(stream_data: pandas.DataFrame, file = None) -> None
         if less_than_half is not True:
             total_seconds += 0.5
 
-
+        # This could probably be done with a dictionary comprehension, but I'm not sure if it's worth it.
+        # I could probably also make a function that does this to help tidy things up a bit.
         # This is just to handle reinitialization of the stats dictionary.
         stats["timestamp"] = total_seconds
         try:

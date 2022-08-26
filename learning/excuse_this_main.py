@@ -13,7 +13,7 @@ RUN_SESSION = False
 
 
 # Set the cache
-fastf1.Cache.enable_cache('f1cache')
+fastf1.Cache.enable_cache('../f1cache')
 session = fastf1.get_session(2019, 'Spanish', 'R')
 if RUN_SESSION:
     session.load()
@@ -111,6 +111,8 @@ def using_next_for_all_cars() -> None:
     # I could actually just instatiate a list of the dataframes, and then iterate through those. Or a list of tuples
     # Would work too. Where the first index is the car number.
 
+    # I can't remember completely, but I think there might have been a dataframe for each car here?
+
     dataframes = []
     for car_number in car_numbers:
         dataframes.append((car_number, pos_data[car_number].iterrows()))
@@ -124,6 +126,8 @@ def using_next_for_all_cars() -> None:
     x_pos = []
     y_pos = []
     z_pos = []
+
+    # I should have drawn out how this algorithm flows and uploaded it to Notion.
 
     for i in range(length):
         for car_number, iterrows in dataframes:
@@ -227,7 +231,7 @@ def create_file_with_jsons() -> None:
     # print(json_list)
 
     # Create file
-    with open("data.json", "w") as outfile:
+    with open("../data.json", "w") as outfile:
         for json_object in json_list:
             json.dump(json_object, outfile, indent=4)
             outfile.write("\n")
