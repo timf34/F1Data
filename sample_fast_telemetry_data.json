@@ -44,7 +44,10 @@
         "lead_time" : 7.2
         "gap_to_leader" : 2.253
         "gap_to_postiion_ahead": 0.61
-        "updated_time" : "True" 
+        "updated_time" : "True",
+        "x_pos" : 1232,
+        "y_pos" : 31,
+        "z_pos" : 10
       },
       "22" : {
         "rank": 1,
@@ -58,6 +61,9 @@
         "gap_to_leader" : 0
         "gap_to_postiion_ahead": 0
         "updated_time" : "False" 
+        "x_pos" : 1432,
+        "y_pos" : 41,
+        "z_pos" : 40
       }
     }
   }
