@@ -38,8 +38,6 @@
         "lapsCompleted" : 4,
         "status": "onTrack",
         "speed": "1.0",
-        "acceleration": "0.0",
-        "cornering": "False",
         "rpm" : 3600,
         "braking": "False",
         "leadTime" : 7.2
@@ -52,8 +50,6 @@
         "lapsCompleted" : 4,
         "status": "offTrack",
         "speed": "1.0",
-        "acceleration": "0.0",
-        "cornering": "False",
         "rpm" : 3500,
         "braking": "False",
         "leadTime" : 0,
