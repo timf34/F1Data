@@ -17,6 +17,7 @@ session = fastf1.get_session(2019, 'Spanish', 'R')
 if RUN_SESSION:
     session.load()
 
+list_of_car_numbers = ['44', '77', '33', '5', '16', '10', '20', '55', '26', '8', '23', '3', '27', '7', '11', '99', '63', '88', '18', '4']
 
 def print_pandas_dataframe_info(dataframe: pandas.DataFrame) -> None:
     """
@@ -114,11 +115,19 @@ def iterate_over_timing_data(stream_data: pandas.DataFrame, file = None, using_l
             stats["car_number"][row['Driver']] = {}
             stats["car_number"][row['Driver']]["gap_to_leader"] = row['GapToLeader']
             stats["car_number"][row['Driver']]["gap_to_postiion_ahead"] = row['IntervalToPositionAhead']
+            stats["car_number"][row['Driver']]["updated"] = "True"
+
         except:
             stats["car_number"] = {}
             stats["car_number"][row['Driver']] = {}
             stats["car_number"][row['Driver']]["gap_to_leader"] = row['GapToLeader']
             stats["car_number"][row['Driver']]["gap_to_postiion_ahead"] = row['IntervalToPositionAhead']
+            stats["car_number"][row['Driver']]["updated"] = "True"
+
+        for number in list_of_car_numbers:
+            if number not in stats["car_number"]:
+                stats["car_number"][str(number)] = {"gap_to_leader" : "0", "gap_to_position_ahead" : "0", "updated" : "False"}
+
 
     if using_list:
         json.dump(dict_with_list, file, indent=4)
@@ -161,6 +170,7 @@ def main():
     # iterate_over_timing_data(stream_data)
     write_to_json_file('stream_data.json', stream_data)
     # print_car_data()
+
 
 if __name__ == '__main__':
     main()
