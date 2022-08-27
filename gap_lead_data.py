@@ -9,7 +9,7 @@ import math
 
 fastf1.plotting.setup_mpl()
 
-RUN_SESSION = False
+RUN_SESSION = True
 
 # Set the cache
 fastf1.Cache.enable_cache('f1cache')
@@ -62,14 +62,18 @@ def get_timing_data(sorted: bool = True, short: bool = False) -> pandas.DataFram
             return fastf1.api.timing_data(session.api_path)[1]
 
 
-def iterate_over_timing_data(stream_data: pandas.DataFrame, file = None) -> None:
+def iterate_over_timing_data(stream_data: pandas.DataFrame, file = None, using_list: bool = True) -> None:
     """
     This function will iterate over the timing data... getting tired, will come back to this tmrw.
     """
     stats = {}
 
+    # Clean up this algorithm and write notes on it. Or at least upload the photo to Notion
+
     less_than_half: bool = True  # This variable keeps track of whether we have changed to the next half second or not.
     last_state: bool = less_than_half  # This just keeps track of the last value of less_than_half.
+
+    dict_with_list = {"streaming_data" : []}
 
     for index, row in stream_data.iterrows():
         value = (row['Time'].total_seconds() * 10) % 10
@@ -85,8 +89,11 @@ def iterate_over_timing_data(stream_data: pandas.DataFrame, file = None) -> None
             # print("We have changed to the next half second.")
             last_state = less_than_half
             if file is not None:
-                json.dump(stats, file, indent=4)
-                file.write("\n")
+                if not using_list:
+                    json.dump(stats, file, indent=4)
+                    file.write("\n")
+                else:
+                    dict_with_list["streaming_data"].append(stats)
             stats = {}  # Reset the stats dictionary.
 
         # Fill in the stats dictionary
@@ -113,7 +120,29 @@ def iterate_over_timing_data(stream_data: pandas.DataFrame, file = None) -> None
             stats["car_number"][row['Driver']]["gap_to_leader"] = row['GapToLeader']
             stats["car_number"][row['Driver']]["gap_to_postiion_ahead"] = row['IntervalToPositionAhead']
 
+    if using_list:
+        json.dump(dict_with_list, file, indent=4)
     print(stats)
+
+
+def find_mean_timing_frequency(stream_data: pandas.DataFrame) -> Tuple[float, float]:
+    """
+    This function will find the frequency with which the timestamps are taken for an individual car.
+    i.e. we'll find the average time between updates
+
+    I will come back to this again, I'll need to subtract the timesteps. For now I'll just eyeball the data.
+    :param stream_data:
+    :return:
+    """
+    pass
+
+
+def print_car_data():
+    print(session.car_data.keys())
+    print(session.car_data["44"].columns)
+
+    print(session.pos_data.keys())
+    print(session.pos_data["44"].columns)
 
 
 def write_to_json_file(filename: str, stream_data: pandas.DataFrame) -> None:
@@ -122,9 +151,8 @@ def write_to_json_file(filename: str, stream_data: pandas.DataFrame) -> None:
     :param filename:
     :return:
     """
-    with open(filename, 'w') as f:
+    with open(filename, 'w+') as f:
         iterate_over_timing_data(stream_data, f)
-
 
 
 def main():
@@ -132,7 +160,7 @@ def main():
     # print_pandas_dataframe_info(stream_data)
     # iterate_over_timing_data(stream_data)
     write_to_json_file('stream_data.json', stream_data)
-
+    # print_car_data()
 
 if __name__ == '__main__':
     main()
