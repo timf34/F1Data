@@ -7,6 +7,8 @@ import statistics
 import json
 import math
 
+from copy import deepcopy
+
 fastf1.plotting.setup_mpl()
 
 RUN_SESSION = True
@@ -50,16 +52,18 @@ def get_timing_data(sorted: bool = True, short: bool = False) -> pandas.DataFram
 
     """
     if sorted:
-        print("Getting sorted timing data")
         if short:
+            print("Getting short sorted timing data")
             return fastf1.api.timing_data(session.api_path)[1].sort_values('Time')[1000:1040]
         else:
+            print("Getting long sorted timing data")
             return fastf1.api.timing_data(session.api_path)[1].sort_values('Time')
     else:
-        print("Getting unsorted timing data")
         if short:
+            print("Getting short unsorted timing data")
             return fastf1.api.timing_data(session.api_path)[1][1000:1040]
         else:
+            print("Getting long unsorted timing data")
             return fastf1.api.timing_data(session.api_path)[1]
 
 
@@ -75,6 +79,8 @@ def iterate_over_timing_data(stream_data: pandas.DataFrame, file = None, using_l
     last_state: bool = less_than_half  # This just keeps track of the last value of less_than_half.
 
     dict_with_list = {"streaming_data" : []}
+
+    count = 0
 
     for index, row in stream_data.iterrows():
         value = (row['Time'].total_seconds() * 10) % 10
@@ -126,12 +132,98 @@ def iterate_over_timing_data(stream_data: pandas.DataFrame, file = None, using_l
 
         for number in list_of_car_numbers:
             if number not in stats["car_number"]:
-                stats["car_number"][str(number)] = {"gap_to_leader" : "0", "gap_to_position_ahead" : "0", "updated" : "False"}
+                stats["car_number"][str(number)] = {"gap_to_leader" : "999", "gap_to_position_ahead" : "999", "updated" : "False"}
 
+        count+=1
+        if count >= 600:
+            break
 
     if using_list:
         json.dump(dict_with_list, file, indent=4)
     print(stats)
+
+
+# TODO: note that I am just copying the above function... this is messy as hell but I'm tired so will fix this up later
+# Note: there might be some weird pointer/ memory stuff going on right now. Will need to use decopy. will sort this out tmrw
+def iterate_over_timing_data_with_new_timing(stream_data: pandas.DataFrame, file = None, using_list: bool = True) -> None:
+    """
+    This function will iterate over the timing data... getting tired, will come back to this tmrw.
+    """
+    stats = {}
+    # For keeping track of udpated cars
+    updated_cars = []
+
+
+    # Clean up this algorithm and write notes on it. Or at least upload the photo to Notion
+
+    less_than_half: bool = True  # This variable keeps track of whether we have changed to the next half second or not.
+    last_state: bool = less_than_half  # This just keeps track of the last value of less_than_half.
+
+    dict_with_list = {"streaming_data" : []}
+
+    count = 0
+
+    # Initialize the dict outside the main loop
+    stats["car_number"] = {}
+    for number in list_of_car_numbers:
+        if number not in stats["car_number"]:
+            stats["car_number"][str(number)] = {"gap_to_leader": "0", "gap_to_position_ahead": "0", "updated": "False"}
+
+    for index, row in stream_data.iterrows():
+        value = (row['Time'].total_seconds() * 10) % 10
+        if value < 5:
+            less_than_half = True  # We are in the first half second of the second.
+        else:
+            less_than_half = False
+
+        if less_than_half != last_state:
+            # We have changed to the next half second.
+            # Do logic here
+            # TODO: add tests to ensure this is working. For everything really
+            last_state = less_than_half
+            if file is not None:
+
+                for number in list_of_car_numbers:
+                    if number not in updated_cars:
+                        stats["car_number"][str(number)]["updated"] = "False"
+
+                if not using_list:
+                    json.dump(stats, file, indent=4)
+                    file.write("\n")
+                else:
+                    dict_with_list["streaming_data"].append(deepcopy(stats))
+
+            # Reinitialize the updated_cars list
+            updated_cars = []
+
+
+        total_seconds = math.floor(row['Time'].total_seconds())
+        if less_than_half is not True:
+            total_seconds += 0.5
+
+        # This could probably be done with a dictionary comprehension, but I'm not sure if it's worth it.
+        # I could probably also make a function that does this to help tidy things up a bit.
+        # This is just to handle reinitialization of the stats dictionary.
+        stats["timestamp"] = total_seconds
+        try:
+            stats["car_number"][row['Driver']] = {}
+            stats["car_number"][row['Driver']]["gap_to_leader"] = row['GapToLeader']
+            stats["car_number"][row['Driver']]["gap_to_postiion_ahead"] = row['IntervalToPositionAhead']
+            stats["car_number"][row['Driver']]["updated"] = "True"
+            updated_cars.append(row['Driver'])
+        except:
+            pass
+
+        count+=1
+
+        # TODO: check this out! This needs to be removed going forward... clean the f out of this codebase (politely)!
+        if count >= 600:
+            break
+
+    if using_list:
+        json.dump(dict_with_list, file, indent=4)
+    print(stats)
+
 
 
 def find_mean_timing_frequency(stream_data: pandas.DataFrame) -> Tuple[float, float]:
@@ -161,14 +253,15 @@ def write_to_json_file(filename: str, stream_data: pandas.DataFrame) -> None:
     :return:
     """
     with open(filename, 'w+') as f:
-        iterate_over_timing_data(stream_data, f)
+        # iterate_over_timing_data(stream_data, f)
+        iterate_over_timing_data_with_new_timing(stream_data, f)
 
 
 def main():
     stream_data = get_timing_data()
-    # print_pandas_dataframe_info(stream_data)
+    print_pandas_dataframe_info(stream_data)
     # iterate_over_timing_data(stream_data)
-    write_to_json_file('stream_data.json', stream_data)
+    write_to_json_file('very_short_stream_data.json', stream_data)
     # print_car_data()
 
 
