@@ -217,8 +217,11 @@ def iterate_over_timing_data_with_new_timing(stream_data: pandas.DataFrame, file
         count+=1
 
         # TODO: check this out! This needs to be removed going forward... clean the f out of this codebase (politely)!
-        if count >= 600:
-            break
+        # Note: this is what we were using for controlling the size of the dataset... not the `get_dataset` function.
+        # 600 for very short dataset, and 3000 for short dataset... just comment out for full dataset.
+        # Clean this up!!!
+        # if count >= 3000:
+        #     break
 
     if using_list:
         json.dump(dict_with_list, file, indent=4)
@@ -261,7 +264,7 @@ def main():
     stream_data = get_timing_data()
     print_pandas_dataframe_info(stream_data)
     # iterate_over_timing_data(stream_data)
-    write_to_json_file('very_short_stream_data.json', stream_data)
+    write_to_json_file('stream_data.json', stream_data)
     # print_car_data()
 
 
