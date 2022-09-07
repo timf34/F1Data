@@ -96,7 +96,7 @@ class TelemetryData:
 
 
 def merging_telemetry_with_timing_data():
-    timing_data = load_json_file("very_short_stream_data.json")
+    timing_data = load_json_file("stream_data.json")
 
     # for i in timing_data["streaming_data"]:
     #      print(i)
@@ -104,15 +104,37 @@ def merging_telemetry_with_timing_data():
     # sample_timstampes = [1955, 2000, 2050]
 
     telemetry_data = TelemetryData()
-    telemetry_list = telemetry_data.create_list_with_dicts(short_list=True)
+    telemetry_list = telemetry_data.create_list_with_dicts(short_list=False)
+
+    # I should make a function for this creation of a dict with car_numbers, etc. I repeat it a lot.
+    temp_dict = {"car_number": {}}
+    for car_number in telemetry_data.list_of_car_numbers:
+        temp_dict["car_number"][car_number] = {}
+
+    another_big_list = []
 
     for i in timing_data["streaming_data"]:
         for j in telemetry_list:
             if j["timestamp"] >= float(i["timestamp"]):
-                print("i timestamp: ", i["timestamp"])
-                print(j)
-                print("new line here \n")
+                for car_number in telemetry_data.list_of_car_numbers:
+                    # The pointers/ expression here merges two dicts:)
+                    i["car_number"][car_number] =  {**j["car_number"][car_number], **i["car_number"][car_number]}
+                    temp_dict["car_number"][car_number] = {**j["car_number"][car_number], **i["car_number"][car_number]}
+                    temp_dict["timestamp"] = i["timestamp"]
+
+                # print(f"temp dict: {temp_dict}")
+                another_big_list.append(deepcopy(temp_dict))
                 break
+
+    # print("another big list: ", another_big_list)
+    # print("length of another big list: ", len(another_big_list))
+
+    new_dict = {"streaming_data": another_big_list}
+
+    # Write this new dict to a file
+    with open("stream_data.json", "w") as f:
+        json.dump(new_dict, f, indent=4)
+        f.write("\n")
 
 
 def main():
