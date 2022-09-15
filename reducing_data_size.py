@@ -21,9 +21,8 @@ class LetsTestJsonReductionStuff(object):
         self.test4 = TEST_CASE_SINGLE_TIMESTAMP_TWENTY_CARS_LIST
         self.test5 = TEST_CASE_SINGLE_TIMESTAMP_TWENTY_CARS_LIST_2D
 
-
     def test_sizes(self):
-        for i in range(1, 6):
+        for i in range(1, len(self.__dict__.keys()) + 1):
             test_case = getattr(self, f"test{i}")
             json_obj = json.dumps(test_case)
             print(f"test{i} size: {len(json_obj)}")
