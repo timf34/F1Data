@@ -1,5 +1,12 @@
 import json
-from config import TEST_CASE_SINGLE_TIMESTAMP_TWO_CARS_SHORT_KEYS, TEST_CASE_SINGLE_TIMESTAMP_TWENTY_CARS_SHORT_KEYS
+from config import (
+    TEST_CASE_SINGLE_TIMESTAMP_TWO_CARS_SHORT_KEYS,
+    TEST_CASE_SINGLE_TIMESTAMP_TWENTY_CARS_SHORT_KEYS,
+    TEST_CASE_SINGLE_TIMESTAMP_TWENTY_CARS_LIST,
+    TEST_CASE_SINGLE_TIMESTAMP_TWO_CARS_LIST,
+    TEST_CASE_SINGLE_TIMESTAMP_TWENTY_CARS_LIST_2D,
+)
+
 
 # json_obj = json.dumps(TEST_CASE_SINGLE_TIMESTAMP_TWO_CARS_SHORT_KEYS, indent=4)
 # print(len(json_obj))
@@ -10,6 +17,16 @@ class LetsTestJsonReductionStuff(object):
     def __init__(self):
         self.test1 = TEST_CASE_SINGLE_TIMESTAMP_TWO_CARS_SHORT_KEYS
         self.test2 = TEST_CASE_SINGLE_TIMESTAMP_TWENTY_CARS_SHORT_KEYS
+        self.test3 = TEST_CASE_SINGLE_TIMESTAMP_TWO_CARS_LIST
+        self.test4 = TEST_CASE_SINGLE_TIMESTAMP_TWENTY_CARS_LIST
+        self.test5 = TEST_CASE_SINGLE_TIMESTAMP_TWENTY_CARS_LIST_2D
+
+
+    def test_sizes(self):
+        for i in range(1, 6):
+            test_case = getattr(self, f"test{i}")
+            json_obj = json.dumps(test_case)
+            print(f"test{i} size: {len(json_obj)}")
 
     def test_no_indent(self):
         with_indent1 = json.dumps(self.test1, indent=4)
@@ -30,6 +47,7 @@ class LetsTestJsonReductionStuff(object):
 
     def test_test_cases(self):
         self.test_no_indent()
+        self.test_sizes()
 
 
 if __name__ == "__main__":

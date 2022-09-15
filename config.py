@@ -269,3 +269,64 @@ TEST_CASE_SINGLE_TIMESTAMP_TWENTY_CARS_SHORT_KEYS = {
     ]
 }
 
+TEST_CASE_SINGLE_TIMESTAMP_TWO_CARS_LIST = {
+    "streaming_data":
+    [228, 100, "False", 11135, 5, "+0.020", "+0.020", "True",
+     228, 100, "False", 10747, 6, "LAP 1", "LAP 1", "True",
+     1993
+    ]
+}
+
+
+TEST_CASE_SINGLE_TIMESTAMP_TWENTY_CARS_LIST = {
+    "streaming_data":
+    [228, 100, "False", 11135, 5, "+0.020", "+0.020", "True",
+     228, 100, "False", 10747, 6, "LAP 1", "LAP 1", "True",
+    228, 100, "False", 10747, 6, "LAP 1", "LAP 1", "True",
+    228, 100, "False", 10747, 6, "LAP 1", "LAP 1", "True",
+    228, 100, "False", 10747, 6, "LAP 1", "LAP 1", "True",
+    228, 100, "False", 10747, 6, "LAP 1", "LAP 1", "True",
+    228, 100, "False", 10747, 6, "LAP 1", "LAP 1", "True",
+    228, 100, "False", 10747, 6, "LAP 1", "LAP 1", "True",
+    228, 100, "False", 10747, 6, "LAP 1", "LAP 1", "True",
+    228, 100, "False", 10747, 6, "LAP 1", "LAP 1", "True",
+    228, 100, "False", 10747, 6, "LAP 1", "LAP 1", "True",
+    228, 100, "False", 10747, 6, "LAP 1", "LAP 1", "True",
+    228, 100, "False", 10747, 6, "LAP 1", "LAP 1", "True",
+    228, 100, "False", 10747, 6, "LAP 1", "LAP 1", "True",
+    228, 100, "False", 10747, 6, "LAP 1", "LAP 1", "True",
+    228, 100, "False", 10747, 6, "LAP 1", "LAP 1", "True",
+    228, 100, "False", 10747, 6, "LAP 1", "LAP 1", "True",
+    228, 100, "False", 10747, 6, "LAP 1", "LAP 1", "True",
+    228, 100, "False", 10747, 6, "LAP 1", "LAP 1", "True",
+    228, 100, "False", 10747, 6, "LAP 1", "LAP 1", "True",
+     1993
+    ]
+}
+
+TEST_CASE_SINGLE_TIMESTAMP_TWENTY_CARS_LIST_2D = {
+    "streaming_data":
+    [
+        [228, 100, "False", 11135, 5, "+0.020", "+0.020", "True"],
+        [228, 100, "False", 10747, 6, "LAP 1", "LAP 1", "True"],
+        [228, 100, "False", 10747, 6, "LAP 1", "LAP 1", "True"],
+        [228, 100, "False", 10747, 6, "LAP 1", "LAP 1", "True"],
+        [228, 100, "False", 10747, 6, "LAP 1", "LAP 1", "True"],
+        [228, 100, "False", 10747, 6, "LAP 1", "LAP 1", "True"],
+        [228, 100, "False", 10747, 6, "LAP 1", "LAP 1", "True"],
+        [228, 100, "False", 10747, 6, "LAP 1", "LAP 1", "True"],
+        [228, 100, "False", 10747, 6, "LAP 1", "LAP 1", "True"],
+        [228, 100, "False", 10747, 6, "LAP 1", "LAP 1", "True"],
+        [228, 100, "False", 10747, 6, "LAP 1", "LAP 1", "True"],
+        [228, 100, "False", 10747, 6, "LAP 1", "LAP 1", "True"],
+        [228, 100, "False", 10747, 6, "LAP 1", "LAP 1", "True"],
+        [228, 100, "False", 10747, 6, "LAP 1", "LAP 1", "True"],
+        [228, 100, "False", 10747, 6, "LAP 1", "LAP 1", "True"],
+        [228, 100, "False", 10747, 6, "LAP 1", "LAP 1", "True"],
+        [228, 100, "False", 10747, 6, "LAP 1", "LAP 1", "True"],
+        [228, 100, "False", 10747, 6, "LAP 1", "LAP 1", "True"],
+        [228, 100, "False", 10747, 6, "LAP 1", "LAP 1", "True"],
+        [228, 100, "False", 10747, 6, "LAP 1", "LAP 1", "True"],
+        [1993]
+    ]
+}
