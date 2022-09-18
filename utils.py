@@ -16,7 +16,7 @@ def parse_our_json_dict(json_dict: dict) -> dict:
 
 def main():
     # This function will call the read_json_file function.
-    json_list = load_json_file("very_short_stream_data.json")
+    json_list = load_json_file("data/very_short_stream_data.json")
     print(type(json_list))
     parse_our_json_dict(json_list)
 
