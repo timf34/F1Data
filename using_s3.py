@@ -57,10 +57,11 @@ class StreamFromS3:
             print(f"count: {count} i: {info}")
 
             response = self.iot_client.publish(
-                topic="PreMatch/1",
+                topic="PreMatch/420",
                 qos=1,
                 payload=str(info)
             )
+            print("response: ", response)
 
             if count == 5:
                 break
