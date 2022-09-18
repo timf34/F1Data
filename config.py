@@ -330,3 +330,10 @@ TEST_CASE_SINGLE_TIMESTAMP_TWENTY_CARS_LIST_2D = {
         [1993]
     ]
 }
+
+FOR_AWS = {
+    "streaming_data":
+    [
+        [228, 100, "False", 11135, 5, "+0.020", "+0.020", "True"],  [228, 100, "False", 10747, 6, "LAP 1", "LAP 1", "True"], [228, 100, "False", 10747, 6, "LAP 1", "LAP 1", "True"], [228, 100, "False", 10747, 6, "LAP 1", "LAP 1", "True"], [228, 100, "False", 10747, 6, "LAP 1", "LAP 1", "True"], [228, 100, "False", 10747, 6, "LAP 1", "LAP 1", "True"], [228, 100, "False", 10747, 6, "LAP 1", "LAP 1", "True"], [228, 100, "False", 10747, 6, "LAP 1", "LAP 1", "True"], [228, 100, "False", 10747, 6, "LAP 1", "LAP 1", "True"], [228, 100, "False", 10747, 6, "LAP 1", "LAP 1", "True"], [228, 100, "False", 10747, 6, "LAP 1", "LAP 1", "True"],  [228, 100, "False", 10747, 6, "LAP 1", "LAP 1", "True"],[228, 100, "False", 10747, 6, "LAP 1", "LAP 1", "True"],[228, 100, "False", 10747, 6, "LAP 1", "LAP 1", "True"], [228, 100, "False", 10747, 6, "LAP 1", "LAP 1", "True"], [228, 100, "False", 10747, 6, "LAP 1", "LAP 1", "True"],[228, 100, "False", 10747, 6, "LAP 1", "LAP 1", "True"],  [228, 100, "False", 10747, 6, "LAP 1", "LAP 1", "True"], [228, 100, "False", 10747, 6, "LAP 1", "LAP 1", "True"], [228, 100, "False", 10747, 6, "LAP 1", "LAP 1", "True"],  [1993]
+    ]
+}
