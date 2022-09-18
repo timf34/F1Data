@@ -24,8 +24,10 @@ class TelemetryData:
         if RUN_SESSION:
             self.session.load()
 
+        self.short_list_of_car_numbers = ['44', '77']
         self.list_of_car_numbers = ['44', '77', '33', '5', '16', '10', '20', '55', '26', '8', '23', '3', '27', '7', '11', '99', '63', '88', '18', '4']
         self.data = self.get_car_data()
+
     def print_pandas_dataframe_info(self):
         # Not sure if this is actually very descriptive, but it will do for now.
         print("dataframe columns: \n", self.data["44"].columns, "\n")
@@ -63,7 +65,7 @@ class TelemetryData:
         temp_dict = {}
         temp_dict["car_number"] = {}
         for car_number in self.list_of_car_numbers:
-            temp_dict["car_number"][car_number] = {"speed": "", "throttle": "", "brake": "", "rpm": "", "gear": ""}
+            temp_dict["car_number"][car_number] = {"s": "", "t": "", "b": "", "r": "", "g": ""}
 
         print(temp_dict)
 
@@ -72,7 +74,7 @@ class TelemetryData:
         dataframes = []
         for car_number in self.list_of_car_numbers:
             if short_list:
-                _dataframe = self.data[car_number][7000:8500]
+                _dataframe = self.data[car_number][7000:8000]
             else:
                 _dataframe = self.data[car_number]
             dataframes.append((car_number, _dataframe.iterrows()))
@@ -84,19 +86,20 @@ class TelemetryData:
         for i in range(length):
             for car_number, iterrows in dataframes:
                 info = next(iterrows)
-                temp_dict["timestamp"] = info[1]["Time"].total_seconds()
-                temp_dict["car_number"][car_number]["speed"] = info[1]["Speed"]
-                temp_dict["car_number"][car_number]["throttle"] = info[1]["Throttle"]
-                temp_dict["car_number"][car_number]["brake"] = info[1]["Brake"]
-                temp_dict["car_number"][car_number]["gear"] = info[1]["nGear"]
-                temp_dict["car_number"][car_number]["rpm"] = info[1]["RPM"]
+                temp_dict["ts"] = info[1]["Time"].total_seconds()
+                temp_dict["car_number"][car_number]["s"] = info[1]["Speed"]
+                temp_dict["car_number"][car_number]["t"] = info[1]["Throttle"]
+                temp_dict["car_number"][car_number]["b"] = str(info[1]["Brake"])
+                temp_dict["car_number"][car_number]["g"] = info[1]["nGear"]
+                temp_dict["car_number"][car_number]["r"] = info[1]["RPM"]
             big_list.append(deepcopy(temp_dict))
 
+        print("big list: ", big_list)
         return big_list
 
 
 def merging_telemetry_with_timing_data():
-    timing_data = load_json_file("stream_data.json")
+    timing_data = load_json_file("two_cars_very_short_stream_data.json")
 
     # for i in timing_data["streaming_data"]:
     #      print(i)
@@ -108,19 +111,23 @@ def merging_telemetry_with_timing_data():
 
     # I should make a function for this creation of a dict with car_numbers, etc. I repeat it a lot.
     temp_dict = {"car_number": {}}
-    for car_number in telemetry_data.list_of_car_numbers:
+    # TODO: hardcoded short list
+    for car_number in telemetry_data.short_list_of_car_numbers:
         temp_dict["car_number"][car_number] = {}
 
     another_big_list = []
 
+    print("timing data: ", timing_data)
+
     for i in timing_data["streaming_data"]:
         for j in telemetry_list:
-            if j["timestamp"] >= float(i["timestamp"]):
-                for car_number in telemetry_data.list_of_car_numbers:
+            if j["ts"] >= float(i["ts"]):
+                # TODO: hardcoded short list
+                for car_number in telemetry_data.short_list_of_car_numbers:
                     # The pointers/ expression here merges two dicts:)
                     i["car_number"][car_number] =  {**j["car_number"][car_number], **i["car_number"][car_number]}
                     temp_dict["car_number"][car_number] = {**j["car_number"][car_number], **i["car_number"][car_number]}
-                    temp_dict["timestamp"] = i["timestamp"]
+                    temp_dict["ts"] = i["ts"]
 
                 # print(f"temp dict: {temp_dict}")
                 another_big_list.append(deepcopy(temp_dict))
@@ -131,8 +138,10 @@ def merging_telemetry_with_timing_data():
 
     new_dict = {"streaming_data": another_big_list}
 
+    print("new dict: ", new_dict)
+
     # Write this new dict to a file
-    with open("stream_data.json", "w") as f:
+    with open("two_cars_very_short_stream_data.json", "w") as f:
         json.dump(new_dict, f, indent=4)
         f.write("\n")
 
@@ -141,7 +150,7 @@ def main():
     telemetry_data = TelemetryData()
     # telemetry_data.print_pandas_dataframe_info()
     # telemetry_data.random_row_practice()
-    # telemetry_data.create_list_with_dicts()
+    # telemetry_data.create_list_with_dicts(short_list=True)
     merging_telemetry_with_timing_data()
 
 
