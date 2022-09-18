@@ -1,0 +1,14 @@
+dataframe columns for the telemetry data:
+
+dataframe columns:
+
+- Index(['Date', 'RPM', 'Speed', 'nGear', 'Throttle', 'Brake', 'DRS', 'Source', 'Time', 'SessionTime'], dtype='object')
+
+Links:
+
+- Here is a link describing the telemetry data: https://theoehrly.github.io/Fast-F1/core.html#telemetry
+
+Timing:
+
+- Frequency of the telemetry data seems to be about 3 to 4FPS, although I haven't tested this to find out.
+- The timing is the same across all cars.
