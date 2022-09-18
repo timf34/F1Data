@@ -4,6 +4,7 @@ import sys
 
 from typing import Dict
 
+# TODO: get these off of github - make a local file for them.
 ACCESS_KEY = 'AKIAXJHR7VFKNE7DRJF7'
 SECRET_ACCESS_KEY = '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'
 
