@@ -1,5 +1,6 @@
 from matplotlib import pyplot as plt
 from typing import Dict, Tuple
+from copy import deepcopy
 import fastf1
 import fastf1.plotting
 import statistics
@@ -142,7 +143,9 @@ def using_next_for_all_cars() -> None:
             y_pos.append(info[1]["Y"])
             sample_dict["car_data"][car_number]["z_pos"] = info[1]["Z"]
             z_pos.append(info[1]["Z"])
-        big_list.append(sample_dict.copy())
+        # Note: I am not sure wehther this only worked for the timestamp... deepcopy is preferable.
+        # big_list.append(sample_dict.copy())
+        big_list.append(deepcopy(sample_dict))
 
     # print(big_list)
     # print(len(big_list))
