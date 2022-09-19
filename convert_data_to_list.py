@@ -7,8 +7,8 @@ from utils import load_json_file
 
 class ConvertDataToList:
     def __init__(self):
-        self.data_file: str = "data/very_short_stream_data.json"
-        self.new_file_name: str = "data/new_short_json_file.json"
+        self.data_file: str = "data/stream_data.json"
+        self.new_file_name: str = "data/new_json_file.json"
         self.indent: int = 2
 
     def print_info(self):
@@ -40,11 +40,11 @@ class ConvertDataToList:
                 temp_list.extend((j,
                                   i["car_number"][j]["speed"],
                                   i["car_number"][j]["throttle"],
-                                  i["car_number"][j]["brake"],
+                                  str(i["car_number"][j]["brake"]),
                                   i["car_number"][j]["rpm"],
                                   i["car_number"][j]["gear"],
-                                  i["car_number"][j]["gap_to_leader"],
-                                  i["car_number"][j]["gap_to_postiion_ahead"],
+                                  str(i["car_number"][j]["gap_to_leader"]),
+                                  str(i["car_number"][j]["gap_to_postiion_ahead"]),
                                   i["car_number"][j]["updated"],
                                   "\n"
                                   ))
@@ -55,7 +55,6 @@ class ConvertDataToList:
             temp_list = []
 
         return big_list
-
 
     def make_new_json_file(self):
         big_list = self.convert_data_to_list()
