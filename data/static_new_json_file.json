@@ -106,7 +106,7 @@
       "RaceCircuit":"Okayama",
       "Date":"15-09-2022",
       "TimeBasedRace" : "True",
-      "TotalTime" : "3 hours",
+      "TotalTime" : 180,
       "TotalLaps" : 0
     }
 }
