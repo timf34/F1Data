@@ -1,3 +1,5 @@
-aws_keys.py
 /f1cache
 *.pkl
+
+# For handling aws_keys.py, go ahead and commit it without any senstive info...
+# Then run the following command to ignore it: `git update-index --assume-unchanged aws_keys.py`
