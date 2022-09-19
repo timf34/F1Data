@@ -7,8 +7,8 @@ from utils import load_json_file
 
 class ConvertDataToList:
     def __init__(self):
-        self.data_file: str = "data/stream_data.json"
-        self.new_file_name: str = "data/new_json_file.json"
+        self.data_file: str = "data/very_short_stream_data.json"
+        self.new_file_name: str = "data/new_short_json_file.json"
         self.indent: int = 2
 
     def print_info(self):
@@ -36,16 +36,20 @@ class ConvertDataToList:
                 #                   i["car_number"][j]["i2"],
                 #                   i["car_number"][j]["u"],
                 #                   ))
-                temp_list.append((j, i["car_number"][j]["speed"], i["car_number"][j]["throttle"],
+                # Note: using list.extend so as not to create a nested structure.
+                temp_list.extend((j,
+                                  i["car_number"][j]["speed"],
+                                  i["car_number"][j]["throttle"],
                                   i["car_number"][j]["brake"],
                                   i["car_number"][j]["rpm"],
                                   i["car_number"][j]["gear"],
                                   i["car_number"][j]["gap_to_leader"],
                                   i["car_number"][j]["gap_to_postiion_ahead"],
                                   i["car_number"][j]["updated"],
+                                  "\n"
                                   ))
 
-
+            temp_list.append("timestamp")
             temp_list.append(i["timestamp"])  # Append the timestamp to the end of the list.
             big_list.append(temp_list)
             temp_list = []
@@ -112,9 +116,29 @@ class ConvertDataToList:
         # for i in samp["streaming_data"][0]["car_number"]:
         #     print(i, samp["streaming_data"]["car_number"][i]["s"], samp["streaming_data"]["car_number"][i]["r"], samp["streaming_data"]["ts"])
 
+    def working_with_lists(self):
+        """
+         Just want to test, appending things to a list without creating a nested list
+        """
+        list = []
+        for i in range(10):
+            list.append(i)
+        print(list)
+
+        list = []
+        for i in range(10):
+            list.append((i, i+1))
+        print(list)
+
+        list = []
+        for i in range(10):
+            list.extend((i, i+1))
+        print(list)
+
 
 
 if __name__ == '__main__':
     converter = ConvertDataToList()
     # converter.print_info()
     converter.make_new_json_file()
+    # converter.working_with_lists()
