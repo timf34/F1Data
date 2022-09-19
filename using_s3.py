@@ -1,5 +1,6 @@
 import boto3
 import json
+import time
 import sys
 
 from typing import Dict
@@ -8,13 +9,16 @@ from aws_keys import ACCESS_KEY, SECRET_ACCESS_KEY
 
 
 class StreamFromS3:
-    def __init__(self):
+    def __init__(self, topic="1"):
         self.s3_url: str = 'https://testbucket10022022.s3.eu-west-1.amazonaws.com/very_short_stream_data.json'
         self.s3 = boto3.client('s3', aws_access_key_id=ACCESS_KEY, aws_secret_access_key=SECRET_ACCESS_KEY)
         self.iot_client = boto3.client('iot-data', aws_access_key_id=ACCESS_KEY, aws_secret_access_key=SECRET_ACCESS_KEY, region_name='eu-west-1')
         self.key: str = "stream_data.json"
         self.bucket: str = "testbucket10022022"
         self.static_info_key: str = "static_new_json_file.json"
+        self.short_loop: bool = True
+        self.topic = f"RACE/{topic}"
+        self.use_timer: bool = False
 
     def get_data(self, get_static_info=False) -> Dict:
         if get_static_info:
@@ -51,35 +55,34 @@ class StreamFromS3:
         print("json_object type: ", type(json_object))
 
     def parse_data(self):
-
         # Get and send the static race day information once initially.
         static_data = self.get_data(get_static_info=True)
         json_object = json.loads(static_data['Body'].read().decode('utf-8'))
-        # print(sys.getsizeof(json_object), type(json_object))
+        # print(sys.getsizeof(json_object), type(json_object))  # Size is 232
+        self.publish_to_arduino(json_object)
+        if self.use_timer:
+            time.sleep(3)
 
-        # data = self.get_data()
-        # json_object = json.loads(data['Body'].read().decode('utf-8'))
+        # Now lets process the real race data
+        data = self.get_data()
+        json_object = json.loads(data['Body'].read().decode('utf-8'))
         # print(json_object["streaming_data"][0].keys())
-        #
-        # for count, info in enumerate(json_object["streaming_data"]):
-        #     print(f"count: {count} i: {info}")
-        #
-        #     response = self.iot_client.publish(
-        #         topic="PreMatch/420",
-        #         qos=1,
-        #         payload=str(info)
-        #     )
-        #     print("response: ", response)
-        #
-        #     if count == 5:
-        #         break
 
-    # TODO: do this line locally `iotClient = client = boto3.client('iot-data', region_name='eu-west-1')` and publish
+        for count, info in enumerate(json_object["streaming_data"]):
+            # print(f"count: {count} i: {info}")
+            self.publish_to_arduino(info)
+            if self.use_timer:
+                time.sleep(0.5)
 
-    @staticmethod
-    def _pass():
-        pass
+            if self.short_loop and count == 3:
+                break
 
+    def publish_to_arduino(self, data: Dict):
+        response = self.iot_client.publish(
+            topic=self.topic,
+            qos=1,
+            payload="hey there"
+        )
 
 
 
