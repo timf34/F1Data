@@ -12,10 +12,13 @@ class StreamFromS3:
         self.s3_url: str = 'https://testbucket10022022.s3.eu-west-1.amazonaws.com/very_short_stream_data.json'
         self.s3 = boto3.client('s3', aws_access_key_id=ACCESS_KEY, aws_secret_access_key=SECRET_ACCESS_KEY)
         self.iot_client = boto3.client('iot-data', aws_access_key_id=ACCESS_KEY, aws_secret_access_key=SECRET_ACCESS_KEY, region_name='eu-west-1')
-        self.key = "stream_data.json"
-        self.bucket = "testbucket10022022"
+        self.key: str = "stream_data.json"
+        self.bucket: str = "testbucket10022022"
+        self.static_info_key: str = "static_new_json_file.json"
 
-    def get_data(self) -> Dict:
+    def get_data(self, get_static_info=False) -> Dict:
+        if get_static_info:
+            return self.s3.get_object(Bucket=self.bucket, Key=self.static_info_key)
         return self.s3.get_object(Bucket=self.bucket, Key=self.key)
 
     def print_data(self):
@@ -48,22 +51,28 @@ class StreamFromS3:
         print("json_object type: ", type(json_object))
 
     def parse_data(self):
-        data = self.get_data()
-        json_object = json.loads(data['Body'].read().decode('utf-8'))
-        print(json_object["streaming_data"][0].keys())
 
-        for count, info in enumerate(json_object["streaming_data"]):
-            print(f"count: {count} i: {info}")
+        # Get and send the static race day information once initially.
+        static_data = self.get_data(get_static_info=True)
+        json_object = json.loads(static_data['Body'].read().decode('utf-8'))
+        # print(sys.getsizeof(json_object), type(json_object))
 
-            response = self.iot_client.publish(
-                topic="PreMatch/420",
-                qos=1,
-                payload=str(info)
-            )
-            print("response: ", response)
-
-            if count == 5:
-                break
+        # data = self.get_data()
+        # json_object = json.loads(data['Body'].read().decode('utf-8'))
+        # print(json_object["streaming_data"][0].keys())
+        #
+        # for count, info in enumerate(json_object["streaming_data"]):
+        #     print(f"count: {count} i: {info}")
+        #
+        #     response = self.iot_client.publish(
+        #         topic="PreMatch/420",
+        #         qos=1,
+        #         payload=str(info)
+        #     )
+        #     print("response: ", response)
+        #
+        #     if count == 5:
+        #         break
 
     # TODO: do this line locally `iotClient = client = boto3.client('iot-data', region_name='eu-west-1')` and publish
 
