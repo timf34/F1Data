@@ -1,2 +1,3 @@
 aws_keys.py
 /f1cache
+*.pkl
