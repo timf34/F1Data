@@ -14,6 +14,11 @@ RUN_SESSION = True
 # Note: I started building this out as a class... which I should have done from the start... but it would take a bit
 # longer to do this so I am going to go back to what I was already doing
 
+list_of_car_numbers = ['44', '77', '33', '5', '16', '10', '20', '55', '26', '8', '23', '3', '27', '7', '11', '99',
+                            '63', '88', '18', '4']
+
+# TODO: note that I stopped refactoring this file into a class half way through doing so. This really needs to be
+#  to be cleaned up. Read through it once fully and then refactor it into a class.
 
 class LeadData:
     def __init__(self):
@@ -54,6 +59,21 @@ class LeadData:
             else:
                 print("Getting long unsorted timing data")
                 self.data = fastf1.api.timing_data(self.session.api_path)[1]
+
+    def print_car_data(self):
+        print(self.session.car_data.keys())
+        print(self.session.car_data["44"].columns)
+
+        with open("car_data.txt", "w") as f:
+            for i in self.session.car_data:
+                print(i, self.session.car_data[i][10000:10100])
+                f.write(str(self.session.car_data[i][10000:10100]))
+
+
+        # print(self.session.pos_data.keys())
+        # print(self.session.pos_data["44"].columns)
+
+
 
 
 
@@ -263,11 +283,13 @@ def write_to_json_file(filename: str, stream_data: pandas.DataFrame) -> None:
 
 
 def main():
-    stream_data = get_timing_data()
-    print_pandas_dataframe_info(stream_data)
-    # iterate_over_timing_data(stream_data)
-    write_to_json_file('test_short_stream_data.json', stream_data)
-    # print_car_data()
+    # stream_data = get_timing_data()
+    # print_pandas_dataframe_info(stream_data)
+    # # iterate_over_timing_data(stream_data)
+    # write_to_json_file('test_short_stream_data.json', stream_data)
+    # # print_car_data()
+    lead_data = LeadData()
+    lead_data.print_car_data()
 
 
 if __name__ == '__main__':
