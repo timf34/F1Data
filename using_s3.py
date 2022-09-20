@@ -8,6 +8,7 @@ from typing import Dict
 from aws_keys import ACCESS_KEY, SECRET_ACCESS_KEY
 
 
+# TODO: need to add the topic to the code here now... probs with a post init function.
 class StreamFromS3:
     def __init__(self, topic="1"):
         self.s3_url: str = 'https://testbucket10022022.s3.eu-west-1.amazonaws.com/very_short_stream_data.json'
@@ -21,6 +22,7 @@ class StreamFromS3:
         self.use_timer: bool = False
 
     def get_data(self, get_static_info=False) -> Dict:
+        # Note that data["Body"] is of type: botocore.response.StreamingBody
         if get_static_info:
             return self.s3.get_object(Bucket=self.bucket, Key=self.static_info_key)
         return self.s3.get_object(Bucket=self.bucket, Key=self.key)
@@ -84,10 +86,15 @@ class StreamFromS3:
             payload="hey there"
         )
 
+    def work_with_data(self):
+        data = self.get_data()
+        print(data)
+        print(type(data["Body"]))
 
 
 if __name__ == '__main__':
     stream_from_s3 = StreamFromS3()
     # stream_from_s3.get_data()
     # stream_from_s3.print_data()
-    stream_from_s3.parse_data()
+    # stream_from_s3.parse_data()
+    stream_from_s3.work_with_data()
