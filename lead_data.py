@@ -20,6 +20,8 @@ list_of_car_numbers = ['44', '77', '33', '5', '16', '10', '20', '55', '26', '8',
 # TODO: note that I stopped refactoring this file into a class half way through doing so. This really needs to be
 #  to be cleaned up. Read through it once fully and then refactor it into a class.
 
+# TODO: Note that all of my code for telemetry data (i.e. `get_car_data()`) is in the telemetry_data.py file!!!
+
 class LeadData:
     def __init__(self):
         # Set the cache
