@@ -52,9 +52,26 @@ class StreamFromS3:
 
         dict_object = data['Body'].read().decode('utf-8')
         print("dict_object type: ", type(dict_object))
+        # print(dict_object[:1000])
 
         json_object = json.loads(dict_object)
         print("json_object type: ", type(json_object))
+
+    def parse_through_subsection_of_data_by_time(self, start_time: int, end_time: int):
+        data = self.get_data()
+        json_object = json.loads(data['Body'].read().decode('utf-8'))
+        list_of_data = json_object["streaming_data"]
+
+        # Note: we don't actually do this as we are using list indices rather than the actual timestamps.
+        # Account for the offset of 1993 seconds, for this dataset at least
+        # start_time += 1993
+        # end_time = (end_time * 2) + 1993  # Double it to account for the fact that we use half seconds in the data
+
+        end_time *= 2
+
+        list_of_data = list_of_data[start_time:end_time]
+        for count, data in enumerate(list_of_data):
+            pass
 
     def parse_data(self):
         # Get and send the static race day information once initially.
@@ -97,4 +114,5 @@ if __name__ == '__main__':
     # stream_from_s3.get_data()
     # stream_from_s3.print_data()
     # stream_from_s3.parse_data()
-    stream_from_s3.work_with_data()
+    # stream_from_s3.work_with_data()
+    stream_from_s3.parse_through_subsection_of_data_by_time(0, 10)
