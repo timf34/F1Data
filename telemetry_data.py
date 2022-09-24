@@ -1,15 +1,11 @@
 import pandas
 from copy import deepcopy
-from matplotlib import pyplot as plt
-from typing import Dict, Tuple
+from typing import Dict, Tuple, List
 import fastf1
 import fastf1.plotting
-from collections import defaultdict
-import statistics
 import json
-import math
 
-from utils import load_json_file, parse_our_json_dict
+from utils import load_json_file
 
 fastf1.plotting.setup_mpl()
 
@@ -57,7 +53,14 @@ class TelemetryData:
         """
         return self.session.car_data
 
-    def create_list_with_dicts(self, short_list: bool = True) -> list:
+    def create_list_with_dicts(self, short_list: bool = True) -> List[Dict[str, Dict[str, Dict[str, float]]]]:
+        """
+        This function will create a list with dictionaries, where each dictionaries structure is as follows (and note
+        that it's hard to put this into typing notation as it's a nested dictionary):
+        List[{'car_number': {'44 : {'s':44...} , '77': {'s':77...} } }]
+        List[Dict[str, Dict[str, Dict[str, float]]]]
+        """
+
 
         big_list = []
 
@@ -150,8 +153,9 @@ def main():
     telemetry_data = TelemetryData()
     # telemetry_data.print_pandas_dataframe_info()
     # telemetry_data.random_row_practice()
-    # telemetry_data.create_list_with_dicts(short_list=True)
-    merging_telemetry_with_timing_data()
+    telemetry_data.create_list_with_dicts(short_list=True)
+
+    # merging_telemetry_with_timing_data()
 
 
 if __name__ == '__main__':
