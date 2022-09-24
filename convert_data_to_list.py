@@ -110,11 +110,7 @@ class ConvertDataToList:
 
         print("big list: ", big_list)
 
-
-        # Tired right now and cant quite place why this won't work... I am tired evidently. Just get the above working (which was the most intuitive to me.
-        # for i in samp["streaming_data"][0]["car_number"]:
-        #     print(i, samp["streaming_data"]["car_number"][i]["s"], samp["streaming_data"]["car_number"][i]["r"], samp["streaming_data"]["ts"])
-
+    @staticmethod
     def working_with_lists(self):
         """
          Just want to test, appending things to a list without creating a nested list
