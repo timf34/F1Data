@@ -42,18 +42,18 @@ def print_pandas_dataframe_info(dataframe: pandas.DataFrame) -> None:
     print("dataframe sorted by Time: \n", dataframe.sort_values(by='Time')[3000:3040], "\n")
 
 
-def get_timing_data(sorted: bool = True, short: bool = False) -> pandas.DataFrame:
+def get_timing_data(is_sorted: bool = True, short: bool = False) -> pandas.DataFrame:
     """
     # https://theoehrly.github.io/Fast-F1/api.html#fastf1.api.timing_data
 
-    :param sorted: Whether to sort the data by time.
+    :param is_sorted: Whether to sort the data by time.
     :param short: Whether to return a sliced version of the dataset (a fraction of it) or not
     :return:
         ~~(DataFrame, DataFrame): The first DataFrame is the lap data, the second's the stream_data (with gap times!)~~
         DataFrame: We will just return the streaming data actually to make things easier for now
 
     """
-    if sorted:
+    if is_sorted:
         if short:
             print("Getting short sorted timing data")
             return fastf1.api.timing_data(session.api_path)[1].sort_values('Time')[1000:1040]
@@ -143,6 +143,8 @@ def iterate_over_timing_data(stream_data: pandas.DataFrame, file=None, using_lis
     print(stats)
 
 
+# Note: that I am coming back to this now later, and I have no idea what the 'new_timing' part of this function is.
+
 # TODO: note that I am just copying the above function... this is messy as hell but I'm tired so will fix this up later
 # Note: there might be some weird pointer/ memory stuff going on right now. Will need to use decopy. will sort this out tmrw
 def iterate_over_timing_data_with_new_timing(stream_data: pandas.DataFrame, short: bool, file = None, using_list: bool = True) -> None:
@@ -172,15 +174,12 @@ def iterate_over_timing_data_with_new_timing(stream_data: pandas.DataFrame, shor
     else:
         for number in list_of_car_numbers:
             if number not in stats["car_number"]:
-                stats["car_number"][str(number)] = {"gap_to_leader": "0", "gap_to_position_ahead": "0", "updated": "False"}
+                stats["car_number"][str(number)] = {"gap_to_leader": "999", "gap_to_position_ahead": "999", "updated": "False"}
 
     for index, row in stream_data.iterrows():
         value = (row['Time'].total_seconds() * 10) % 10
-        if value < 5:
-            less_than_half = True  # We are in the first half second of the second.
-        else:
-            less_than_half = False
 
+        less_than_half = value < 5
         if less_than_half != last_state:
             # We have changed to the next half second.
             # Do logic here
@@ -202,24 +201,41 @@ def iterate_over_timing_data_with_new_timing(stream_data: pandas.DataFrame, shor
             # Reinitialize the updated_cars list
             updated_cars = []
 
-
         total_seconds = math.floor(row['Time'].total_seconds())
-        if less_than_half is not True:
+        if not less_than_half:
             total_seconds += 0.5
+
+        print("total seconds: ", total_seconds)
+
+        # Just going to use a manual count here for setting the timestamp. I am going to need a plan for how to skip
+        # when the original dataset doesn't have a matching timestamp.
+        # TODO: I need to write this plan out. 28/9/22.
+        #  it might even be a good idea for me to just copy this function down, and then rewrite it.
+        # if count == 0:
+        #     print("First time")
+        #     manual_timestamp = total_seconds
+        #     print(manual_timestamp)
+        # else:
+        #     manual_timestamp = manual_timestamp + 0.5
 
         # This could probably be done with a dictionary comprehension, but I'm not sure if it's worth it.
         # I could probably also make a function that does this to help tidy things up a bit.
         # This is just to handle reinitialization of the stats dictionary.
+
         stats["ts"] = total_seconds
+        # stats["ts"] = manual_timestamp
+
+
+        # TODO: HARDCODED list_of_car_numbers (I should be able to select between very short list, and normal list)
         try:
-            if str(row['Driver']) in very_short_list_of_car_numbers:
+            if str(row['Driver']) in list_of_car_numbers:
                 stats["car_number"][row['Driver']] = {}
                 stats["car_number"][row['Driver']]["i1"] = row['GapToLeader']
                 stats["car_number"][row['Driver']]["i2"] = row['IntervalToPositionAhead']
                 stats["car_number"][row['Driver']]["u"] = "True"
                 updated_cars.append(row['Driver'])
         except:
-            pass
+            stats["car_number"] = {}
 
         count+=1
 
@@ -227,6 +243,7 @@ def iterate_over_timing_data_with_new_timing(stream_data: pandas.DataFrame, shor
         # Note: this is what we were using for controlling the size of the dataset... not the `get_dataset` function.
         # 600 for very short dataset, and 3000 for short dataset... just comment out for full dataset.
         # Clean this up!!!
+        # TODO: HARDCODED
         if count >= 300:
              break
 
@@ -254,14 +271,17 @@ def write_to_json_file(filename: str, stream_data: pandas.DataFrame) -> None:
     """
     with open(filename, 'w+') as f:
         # iterate_over_timing_data(stream_data, f)
-        iterate_over_timing_data_with_new_timing(stream_data, short=True, file=f)
+        # TODO: note there is an important variable here (`short`) that controls whether we are using the short list or
+        #  not.
+        #  This should be set outside of this function!
+        iterate_over_timing_data_with_new_timing(stream_data, short=False, file=f)
 
 
 def main():
-    stream_data = get_timing_data()
+    stream_data = get_timing_data(short=False)
     print_pandas_dataframe_info(stream_data)
     # iterate_over_timing_data(stream_data)
-    write_to_json_file('two_cars_very_short_stream_data.json', stream_data)
+    write_to_json_file('test.json', stream_data)
     # print_car_data()
 
 
