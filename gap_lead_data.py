@@ -69,7 +69,7 @@ def get_timing_data(sorted: bool = True, short: bool = False) -> pandas.DataFram
             return fastf1.api.timing_data(session.api_path)[1]
 
 
-def iterate_over_timing_data(stream_data: pandas.DataFrame, file = None, using_list: bool = True) -> None:
+def iterate_over_timing_data(stream_data: pandas.DataFrame, file=None, using_list: bool=True) -> None:
     """
     This function will iterate over the timing data... getting tired, will come back to this tmrw.
     """
@@ -86,10 +86,8 @@ def iterate_over_timing_data(stream_data: pandas.DataFrame, file = None, using_l
 
     for index, row in stream_data.iterrows():
         value = (row['Time'].total_seconds() * 10) % 10
-        if value < 5:
-            less_than_half = True  # We are in the first half second of the second.
-        else:
-            less_than_half = False
+
+        less_than_half = value < 5  # If True, we are in the first half of the second
 
         if less_than_half != last_state:
             # We have changed to the next half second.
@@ -238,16 +236,6 @@ def iterate_over_timing_data_with_new_timing(stream_data: pandas.DataFrame, shor
 
 
 
-def find_mean_timing_frequency(stream_data: pandas.DataFrame) -> Tuple[float, float]:
-    """
-    This function will find the frequency with which the timestamps are taken for an individual car.
-    i.e. we'll find the average time between updates
-
-    I will come back to this again, I'll need to subtract the timesteps. For now I'll just eyeball the data.
-    :param stream_data:
-    :return:
-    """
-    pass
 
 
 def print_car_data():
