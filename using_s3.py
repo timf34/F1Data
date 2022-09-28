@@ -100,7 +100,7 @@ class StreamFromS3:
         response = self.iot_client.publish(
             topic=self.topic,
             qos=1,
-            payload="hey there"
+            payload=str(data)
         )
 
     def work_with_data(self):
@@ -113,6 +113,6 @@ if __name__ == '__main__':
     stream_from_s3 = StreamFromS3()
     # stream_from_s3.get_data()
     # stream_from_s3.print_data()
-    # stream_from_s3.parse_data()
+    stream_from_s3.parse_data()
     # stream_from_s3.work_with_data()
-    stream_from_s3.parse_through_subsection_of_data_by_time(0, 10)
+    # stream_from_s3.parse_through_subsection_of_data_by_time(0, 10)
