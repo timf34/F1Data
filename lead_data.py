@@ -66,7 +66,7 @@ class LeadData:
         print(self.session.car_data.keys())
         print(self.session.car_data["44"].columns)
 
-        with open("car_data.txt", "w") as f:
+        with open("notes/car_data.txt", "w") as f:
             for i in self.session.car_data:
                 print(i, self.session.car_data[i][10000:10100])
                 f.write(str(self.session.car_data[i][10000:10100]))

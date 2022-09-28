@@ -60,17 +60,14 @@ class TelemetryData:
         List[{'car_number': {'44 : {'s':44...} , '77': {'s':77...} } }]
         List[Dict[str, Dict[str, Dict[str, float]]]]
         """
-
-
         big_list = []
 
         # initialize dict structure
-        temp_dict = {}
-        temp_dict["car_number"] = {}
+        temp_dict = {"car_number": {}}
         for car_number in self.list_of_car_numbers:
             temp_dict["car_number"][car_number] = {"s": "", "t": "", "b": "", "r": "", "g": ""}
 
-        print(temp_dict)
+        # print(temp_dict)
 
         # create a list of dataframes for the telemetry data for each car
         # Note: we are appendinng dataframes.iterrows() to the list, not the dataframes themselves.
