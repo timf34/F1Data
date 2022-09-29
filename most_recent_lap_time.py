@@ -94,7 +94,10 @@ class MostRecentLapTime:
                         print("StopIteration - we are done with this car")
                         pass
                 # Update our dict
-                i["car_number"][car_num]["mostRecentLapTime"] = lap_data[car_num][1]["LapTime"].total_seconds()
+                most_recent_time = lap_data[car_num][1]["LapTime"].total_seconds()
+                if math.isnan(most_recent_time):
+                    most_recent_time = 999
+                i["car_number"][car_num]["mostRecentLapTime"] = most_recent_time
                 temp_dict["car_number"][car_num] = i["car_number"][car_num]
 
             big_list.append(deepcopy(temp_dict))
