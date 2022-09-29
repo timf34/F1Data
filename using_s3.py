@@ -3,10 +3,11 @@ import json
 import time
 import sys
 
-from typing import Dict
+from typing import Dict, List
 
 from aws_keys import ACCESS_KEY, SECRET_ACCESS_KEY
 
+# TODO: I need to build in an option to just use a local json file here!
 
 # TODO: need to add the topic to the code here now... probs with a post init function.
 class StreamFromS3:
@@ -14,7 +15,7 @@ class StreamFromS3:
         self.s3_url: str = 'https://testbucket10022022.s3.eu-west-1.amazonaws.com/very_short_stream_data.json'
         self.s3 = boto3.client('s3', aws_access_key_id=ACCESS_KEY, aws_secret_access_key=SECRET_ACCESS_KEY)
         self.iot_client = boto3.client('iot-data', aws_access_key_id=ACCESS_KEY, aws_secret_access_key=SECRET_ACCESS_KEY, region_name='eu-west-1')
-        self.key: str = "stream_data.json"
+        self.key: str = "very_short_stream_data_short_keys.json"
         self.bucket: str = "testbucket10022022"
         self.static_info_key: str = "static_new_json_file.json"
         self.short_loop: bool = True
@@ -57,7 +58,10 @@ class StreamFromS3:
         json_object = json.loads(dict_object)
         print("json_object type: ", type(json_object))
 
-    def parse_through_subsection_of_data_by_time(self, start_time: int, end_time: int):
+    def parse_through_subsection_of_data_by_time(self, start_time: int, end_time: int, print_data: bool) -> None:
+        """
+            This function will parse through the data by time, and then publish the data to the arduino.
+        """
         data = self.get_data()
         json_object = json.loads(data['Body'].read().decode('utf-8'))
         list_of_data = json_object["streaming_data"]
@@ -70,8 +74,11 @@ class StreamFromS3:
         end_time *= 2
 
         list_of_data = list_of_data[start_time:end_time]
+
         for count, data in enumerate(list_of_data):
-            pass
+            self.publish_to_arduino(data)
+            if print_data:
+                print(f"count: {count} data: {data}")
 
     def parse_data(self):
         # Get and send the static race day information once initially.
@@ -93,7 +100,7 @@ class StreamFromS3:
             if self.use_timer:
                 time.sleep(0.5)
 
-            if self.short_loop and count == 3:
+            if self.short_loop and count == 4:
                 break
 
     def publish_to_arduino(self, data: Dict):
@@ -111,8 +118,5 @@ class StreamFromS3:
 
 if __name__ == '__main__':
     stream_from_s3 = StreamFromS3()
-    # stream_from_s3.get_data()
-    # stream_from_s3.print_data()
-    stream_from_s3.parse_data()
-    # stream_from_s3.work_with_data()
-    # stream_from_s3.parse_through_subsection_of_data_by_time(0, 10)
+    # stream_from_s3.parse_data()
+    stream_from_s3.parse_through_subsection_of_data_by_time(start_time=0, end_time=10, print_data=True)
