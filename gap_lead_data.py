@@ -174,8 +174,8 @@ def main():
 
     timing_data = GapLeadData(short_dataset=False, short_list_of_cars=False)
     streaming_data = timing_data.lets_get_timing_data()
-    # TODO: note that naming nested files within a directory is not working... fix this! (i.e. "data/class_test.json")
-    timing_data.write_to_json_file('class_test.json', streaming_data)
+    # TODO: note that naming nested files within a directory is not working... fix this! (i.e. "data/very_short_stream_data_short_keys.json")
+    timing_data.write_to_json_file('very_short_stream_data_short_keys.json', streaming_data)
 
 
 if __name__ == '__main__':
