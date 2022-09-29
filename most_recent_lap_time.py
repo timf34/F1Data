@@ -4,6 +4,7 @@ from typing import Dict, Tuple, List, Union
 import fastf1
 import fastf1.plotting
 import json
+import math
 
 from utils import load_json_file
 
@@ -63,20 +64,22 @@ class MostRecentLapTime:
         # Note: this only returns an iterator!
         return {i: self.laps.pick_driver(i).iterrows() for i in self.list_of_car_numbers}
 
-    def iterate_through_json_file(self):
+    def iterate_through_json_file(self) -> List:
 
         # Initialize the first lap time for each car (i.e. get the first row)
         lap_data = {i: next(self.lap_data_per_car[i]) for i in self.list_of_car_numbers}
 
+        temp_dict = {"ts": 0, "car_number": {}}
+
+        big_list = []
+
         # This iterates through the og dataset over each dict containing ("ts" and "car_number") keys
         for i in self.iterable_through_json_file(self.short_json_file):
             car_timestamp = i["ts"]
+            temp_dict["ts"] = car_timestamp
             print("timestamp: ", car_timestamp)
 
-
             for car_num in self.list_of_car_numbers:
-                # print(car_num, i["car_number"][car_num])
-                # print("lap data: ", lap_data[car_num][1]["LapTime"])
 
                 lap_timestamp = lap_data[car_num][1].Time.total_seconds()
                 print("lap timestamp: ", lap_timestamp)
@@ -90,28 +93,30 @@ class MostRecentLapTime:
                     except StopIteration:
                         print("StopIteration - we are done with this car")
                         pass
+                # Update our dict
+                i["car_number"][car_num]["mostRecentLapTime"] = lap_data[car_num][1]["LapTime"].total_seconds()
+                temp_dict["car_number"][car_num] = i["car_number"][car_num]
 
-    def make_our_json_file(self, dict_arg: Dict[str: Union[int, Dict[str, Union[int, str]]]]) -> None:
+            big_list.append(deepcopy(temp_dict))
+        return big_list
+
+    @staticmethod
+    def make_our_json_file(dict_arg: List) -> None:
         """
-            This function takes a dict as an argument within the structure of the dicts within our List for the main
-            json file -> {"ts" : 123, "car_number" : {"44": {...}, "77": {...}, ...}}
-
-            We add these dicts to a List which makes up our {"streaming_data: []"} key.
+            This function takes a List as an argument which makes up our {"streaming_data: []"} key.
 
             We then create a json file.
         """
 
-        big_list = [] # This is the list that will be the value for the "streaming_data" key
-
-
-
-
-
+        car_data = {"streaming_data": dict_arg}
+        with open("data/stream_data_with_lap_times.json", "w") as file:
+            json.dump(car_data, file, indent=2)
 
 
 def main():
     most_recent_lap_time = MostRecentLapTime()
-    most_recent_lap_time.iterate_through_json_file()
+    big_list = most_recent_lap_time.iterate_through_json_file()
+    most_recent_lap_time.make_our_json_file(big_list)
 
 
 
