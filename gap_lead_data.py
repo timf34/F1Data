@@ -10,18 +10,28 @@ import math
 from copy import deepcopy
 
 fastf1.plotting.setup_mpl()
-
 RUN_SESSION = True
 
-# Set the cache
+
+class GapLeadData:
+    def __init__(self):
+        # Set the cache
+        fastf1.Cache.enable_cache('f1cache')
+        self.session = fastf1.get_session(2019, 'Spanish', 'R')
+        if RUN_SESSION:
+            self.session.load()
+        self.very_short_list_of_car_numbers = ["44", "77"]
+        self.list_of_car_numbers = ['44', '77', '33', '5', '16', '10', '20', '55', '26', '8', '23', '3', '27', '7', '11', '99', '63', '88', '18', '4']
+
+
+
+
 fastf1.Cache.enable_cache('f1cache')
 session = fastf1.get_session(2019, 'Spanish', 'R')
 if RUN_SESSION:
     session.load()
-
 very_short_list_of_car_numbers = ["44", "77"]
 list_of_car_numbers = ['44', '77', '33', '5', '16', '10', '20', '55', '26', '8', '23', '3', '27', '7', '11', '99', '63', '88', '18', '4']
-
 
 def print_pandas_dataframe_info(dataframe: pandas.DataFrame) -> None:
     """
