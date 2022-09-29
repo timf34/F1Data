@@ -1,6 +1,10 @@
 def iterable_practicing():
-    for i in range(5):
+    for i in range(10):
         yield i
+
+        # This will still work
+        if i == 3:
+            break
 
 
 def use_iterable():
