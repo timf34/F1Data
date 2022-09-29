@@ -72,9 +72,9 @@ class GapLeadData:
 
         for number in self.list_of_car_numbers:
             if number not in stats["car_number"]:
-                stats["car_number"][str(number)] = {"gap_to_leader": "999",
-                                                    "gap_to_position_ahead": "999",
-                                                    "updated": "False"}
+                stats["car_number"][str(number)] = {"i1": "999",
+                                                    "i2": "999",
+                                                    "u": "False"}
 
         for index, row in stream_data.iterrows():
             decimal_second = (row['Time'].total_seconds() * 10) % 10
@@ -106,9 +106,9 @@ class GapLeadData:
                     for i in range(int(dict_with_list["streaming_data"][-1]["ts"] * 2 + 1), int(total_seconds*2)):
                         temp_dict = {"ts": i / 2}
                         for number in self.list_of_car_numbers:
-                            temp_dict[number] = {"gap_to_leader": "999",
-                                                 "gap_to_position_ahead": "999",
-                                                 "updated": "False"}
+                            temp_dict[number] = {"i1": "999",
+                                                 "i2": "999",
+                                                 "u": "False"}
                         dict_with_list["streaming_data"].append(deepcopy(temp_dict))
 
             stats["ts"] = total_seconds
@@ -127,8 +127,7 @@ class GapLeadData:
 
             # TODO: check this out! This needs to be removed going forward... clean the f out of this codebase (politely)!
             #  HARDCODED
-            if short:
-                if count >= 200:
+            if self.short_dataset and count >= 420:
                     break
 
         if using_list:
