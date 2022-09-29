@@ -104,7 +104,7 @@ class GapLeadData:
                 diff = total_seconds - 0.5 != dict_with_list["streaming_data"][-1]["ts"]
                 if diff != 0.5:
                     for i in range(int(dict_with_list["streaming_data"][-1]["ts"] * 2 + 1), int(total_seconds*2)):
-                        temp_dict = {"ts": i/2}
+                        temp_dict = {"ts": i / 2}
                         for number in self.list_of_car_numbers:
                             temp_dict[number] = {"gap_to_leader": "999",
                                                  "gap_to_position_ahead": "999",
@@ -173,7 +173,7 @@ def main():
     # write_to_json_file('test.json', stream_data)
     # print_car_data()
 
-    timing_data = GapLeadData(short_dataset=True, short_list_of_cars=True)
+    timing_data = GapLeadData(short_dataset=True, short_list_of_cars=False)
     streaming_data = timing_data.lets_get_timing_data()
     timing_data.write_to_json_file('class_test.json', streaming_data)
 
