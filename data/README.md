@@ -1,5 +1,5 @@
 **This is a file for describing each of our `.json` files given
-that we have many...**
+that we have many and need to keep track...**
 
 I will list the ones that are important 
 
