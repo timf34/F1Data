@@ -144,7 +144,7 @@ def main():
     # telemetry_data.random_row_practice()
     # telemetry_data.create_list_with_dicts(short_list=True)
 
-    merging_telemetry_with_timing_data(timing_data_file_path="class_test.json", short_list=False)
+    merging_telemetry_with_timing_data(timing_data_file_path="data/stream_data_short_keys.json", short_list=False)
 
 
 if __name__ == '__main__':
