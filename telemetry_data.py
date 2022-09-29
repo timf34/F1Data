@@ -67,7 +67,6 @@ class TelemetryData:
         for car_number in self.list_of_car_numbers:
             temp_dict["car_number"][car_number] = {"s": "", "t": "", "b": "", "r": "", "g": ""}
 
-        # print(temp_dict)
 
         # create a list of dataframes for the telemetry data for each car
         # Note: we are appendinng dataframes.iterrows() to the list, not the dataframes themselves.
@@ -97,32 +96,29 @@ class TelemetryData:
         return big_list
 
 
-def merging_telemetry_with_timing_data():
-    timing_data = load_json_file("class_test.json")
-
-    # for i in timing_data["streaming_data"]:
-    #      print(i)
-
-    # sample_timstampes = [1955, 2000, 2050]
+def merging_telemetry_with_timing_data(timing_data_file_path: str, short_list: bool = False):
+    timing_data = load_json_file(timing_data_file_path)
 
     telemetry_data = TelemetryData()
     telemetry_list = telemetry_data.create_list_with_dicts(short_list=False)
 
     # I should make a function for this creation of a dict with car_numbers, etc. I repeat it a lot.
     temp_dict = {"car_number": {}}
-    # TODO: hardcoded short list
-    for car_number in telemetry_data.list_of_car_numbers:
+
+    if short_list:
+        list_of_car_numbers = telemetry_data.short_list_of_car_numbers
+    else:
+        list_of_car_numbers = telemetry_data.list_of_car_numbers
+
+    for car_number in list_of_car_numbers:
         temp_dict["car_number"][car_number] = {}
 
     another_big_list = []
 
-    # print("timing data: ", timing_data)
-
     for i in timing_data["streaming_data"]:
         for j in telemetry_list:
             if j["ts"] >= float(i["ts"]):
-                # TODO: hardcoded short list
-                for car_number in telemetry_data.list_of_car_numbers:
+                for car_number in list_of_car_numbers:
                     # The pointers/ expression here merges two dicts:)
                     i["car_number"][car_number] =  {**j["car_number"][car_number], **i["car_number"][car_number]}
                     temp_dict["car_number"][car_number] = {**j["car_number"][car_number], **i["car_number"][car_number]}
@@ -132,12 +128,9 @@ def merging_telemetry_with_timing_data():
                 another_big_list.append(deepcopy(temp_dict))
                 break
 
-    # print("another big list: ", another_big_list)
     # print("length of another big list: ", len(another_big_list))
 
     new_dict = {"streaming_data": another_big_list}
-
-    # print("new dict: ", new_dict)
 
     # Write this new dict to a file
     with open("class_test.json", "w") as f:
@@ -151,7 +144,7 @@ def main():
     # telemetry_data.random_row_practice()
     # telemetry_data.create_list_with_dicts(short_list=True)
 
-    merging_telemetry_with_timing_data()
+    merging_telemetry_with_timing_data(timing_data_file_path="class_test.json", short_list=False)
 
 
 if __name__ == '__main__':
