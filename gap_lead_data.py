@@ -104,9 +104,9 @@ class GapLeadData:
                 diff = total_seconds - 0.5 != dict_with_list["streaming_data"][-1]["ts"]
                 if diff != 0.5:
                     for i in range(int(dict_with_list["streaming_data"][-1]["ts"] * 2 + 1), int(total_seconds*2)):
-                        temp_dict = {"ts": i / 2}
+                        temp_dict = {"ts": i / 2, "car_number": {}}
                         for number in self.list_of_car_numbers:
-                            temp_dict[number] = {"i1": "999",
+                            temp_dict["car_number"][number] = {"i1": "999",
                                                  "i2": "999",
                                                  "u": "False"}
                         dict_with_list["streaming_data"].append(deepcopy(temp_dict))
@@ -172,8 +172,9 @@ def main():
     # write_to_json_file('test.json', stream_data)
     # print_car_data()
 
-    timing_data = GapLeadData(short_dataset=True, short_list_of_cars=False)
+    timing_data = GapLeadData(short_dataset=False, short_list_of_cars=False)
     streaming_data = timing_data.lets_get_timing_data()
+    # TODO: note that naming nested files within a directory is not working... fix this! (i.e. "data/class_test.json")
     timing_data.write_to_json_file('class_test.json', streaming_data)
 
 

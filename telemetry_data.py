@@ -94,12 +94,11 @@ class TelemetryData:
                 temp_dict["car_number"][car_number]["r"] = info[1]["RPM"]
             big_list.append(deepcopy(temp_dict))
 
-        print("big list: ", big_list)
         return big_list
 
 
 def merging_telemetry_with_timing_data():
-    timing_data = load_json_file("two_cars_very_short_stream_data.json")
+    timing_data = load_json_file("class_test.json")
 
     # for i in timing_data["streaming_data"]:
     #      print(i)
@@ -112,18 +111,18 @@ def merging_telemetry_with_timing_data():
     # I should make a function for this creation of a dict with car_numbers, etc. I repeat it a lot.
     temp_dict = {"car_number": {}}
     # TODO: hardcoded short list
-    for car_number in telemetry_data.short_list_of_car_numbers:
+    for car_number in telemetry_data.list_of_car_numbers:
         temp_dict["car_number"][car_number] = {}
 
     another_big_list = []
 
-    print("timing data: ", timing_data)
+    # print("timing data: ", timing_data)
 
     for i in timing_data["streaming_data"]:
         for j in telemetry_list:
             if j["ts"] >= float(i["ts"]):
                 # TODO: hardcoded short list
-                for car_number in telemetry_data.short_list_of_car_numbers:
+                for car_number in telemetry_data.list_of_car_numbers:
                     # The pointers/ expression here merges two dicts:)
                     i["car_number"][car_number] =  {**j["car_number"][car_number], **i["car_number"][car_number]}
                     temp_dict["car_number"][car_number] = {**j["car_number"][car_number], **i["car_number"][car_number]}
@@ -138,10 +137,10 @@ def merging_telemetry_with_timing_data():
 
     new_dict = {"streaming_data": another_big_list}
 
-    print("new dict: ", new_dict)
+    # print("new dict: ", new_dict)
 
     # Write this new dict to a file
-    with open("two_cars_very_short_stream_data.json", "w") as f:
+    with open("class_test.json", "w") as f:
         json.dump(new_dict, f, indent=4)
         f.write("\n")
 
@@ -150,9 +149,9 @@ def main():
     telemetry_data = TelemetryData()
     # telemetry_data.print_pandas_dataframe_info()
     # telemetry_data.random_row_practice()
-    telemetry_data.create_list_with_dicts(short_list=True)
+    # telemetry_data.create_list_with_dicts(short_list=True)
 
-    # merging_telemetry_with_timing_data()
+    merging_telemetry_with_timing_data()
 
 
 if __name__ == '__main__':
