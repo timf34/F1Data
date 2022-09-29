@@ -14,21 +14,29 @@ RUN_SESSION = True
 
 
 class GapLeadData:
-    def __init__(self):
+    def __init__(self, short_dataset: bool = False, short_list_of_cars: bool = False):
         # Set the cache
         fastf1.Cache.enable_cache('f1cache')
         self.session = fastf1.get_session(2019, 'Spanish', 'R')
         if RUN_SESSION:
             self.session.load()
-        self.very_short_list_of_car_numbers = ["44", "77"]
-        self.list_of_car_numbers = ['44', '77', '33', '5', '16', '10', '20', '55', '26', '8', '23', '3', '27', '7', '11', '99', '63', '88', '18', '4']
-        self.timing_data = self.lets_get_timing_data(is_sorted=True, short=False)
+
+        self.short_dataset = short_dataset
+        if short_list_of_cars:
+            self.list_of_car_numbers = ["44", "77"]
+        else:
+            self.list_of_car_numbers = ['44', '77', '33', '5', '16', '10', '20', '55', '26', '8', '23', '3', '27', '7', '11', '99', '63', '88', '18', '4']
+        self.timing_data = self.lets_get_timing_data(is_sorted=True, short=short_dataset)
 
     def lets_get_timing_data(self, is_sorted: bool = True, short: bool = False) -> pandas.DataFrame:
         """
             This function takes a dataframe as an argument, then prints useful information about said dataFrame
             (i.e. columns, number of rows, etc.)
-            :param dataframe:
+            :param
+                is_sorted: bool
+                    This is a boolean that determines whether the data is sorted or not.
+                short: bool
+                    This is a boolean that determines whether we are using the short list of cars or not.
             :return:
         """
         if is_sorted:
@@ -61,18 +69,12 @@ class GapLeadData:
         count = 0
 
         stats = {"car_number": {}}
-        if short:
-            for number in self.very_short_list_of_car_numbers:
-                if number not in stats["car_number"]:
-                    stats["car_number"][str(number)] = {"gap_to_leader": "999",
-                                                        "gap_to_position_ahead": "999",
-                                                        "updated": "False"}
-        else:
-            for number in self.list_of_car_numbers:
-                if number not in stats["car_number"]:
-                    stats["car_number"][str(number)] = {"gap_to_leader": "999",
-                                                        "gap_to_position_ahead": "999",
-                                                        "updated": "False"}
+
+        for number in self.list_of_car_numbers:
+            if number not in stats["car_number"]:
+                stats["car_number"][str(number)] = {"gap_to_leader": "999",
+                                                    "gap_to_position_ahead": "999",
+                                                    "updated": "False"}
 
         for index, row in stream_data.iterrows():
             decimal_second = (row['Time'].total_seconds() * 10) % 10
@@ -81,14 +83,9 @@ class GapLeadData:
             if less_than_half != last_state:
                 last_state = less_than_half
                 if file is not None:
-                    if short:
-                        for number in self.very_short_list_of_car_numbers:
-                            if number not in updated_cars:
-                                stats["car_number"][str(number)]["u"] = "False"
-                    else:
-                        for number in self.list_of_car_numbers:
-                            if number not in updated_cars:
-                                stats["car_number"][str(number)]["u"] = "False"
+                    for number in self.list_of_car_numbers:
+                        if number not in updated_cars:
+                            stats["car_number"][str(number)]["u"] = "False"
 
                     if not using_list:
                         json.dump(stats, file, indent=4)
@@ -103,14 +100,21 @@ class GapLeadData:
             if not less_than_half:
                 total_seconds += 0.5
 
+            if dict_with_list["streaming_data"]:
+                diff = total_seconds - 0.5 != dict_with_list["streaming_data"][-1]["ts"]
+                if diff != 0.5:
+                    for i in range(int(dict_with_list["streaming_data"][-1]["ts"] * 2 + 1), int(total_seconds*2)):
+                        temp_dict = {"ts": i/2}
+                        for number in self.list_of_car_numbers:
+                            temp_dict[number] = {"gap_to_leader": "999",
+                                                 "gap_to_position_ahead": "999",
+                                                 "updated": "False"}
+                        dict_with_list["streaming_data"].append(deepcopy(temp_dict))
+
             stats["ts"] = total_seconds
 
             try:
-                if short:
-                    list_we_are_using = self.very_short_list_of_car_numbers
-                else:
-                    list_we_are_using = self.list_of_car_numbers
-                if str(row['Driver']) in list_we_are_using:
+                if str(row['Driver']) in self.list_of_car_numbers:
                     stats["car_number"][row['Driver']] = {}
                     stats["car_number"][row['Driver']]["i1"] = row['GapToLeader']
                     stats["car_number"][row['Driver']]["i2"] = row['IntervalToPositionAhead']
@@ -141,7 +145,7 @@ class GapLeadData:
             # TODO: note there is an important variable here (`short`) that controls whether we are using the short list or
             #  not.
             #  This should be set outside of this function!
-            self.iterate_over_timing_data(stream_data, short=True, file=f)
+            self.iterate_over_timing_data(stream_data, short=self.short_dataset, file=f)
 
 
 def print_pandas_dataframe_info(dataframe: pandas.DataFrame) -> None:
@@ -169,8 +173,8 @@ def main():
     # write_to_json_file('test.json', stream_data)
     # print_car_data()
 
-    timing_data = GapLeadData()
-    streaming_data = timing_data.lets_get_timing_data(short=True)
+    timing_data = GapLeadData(short_dataset=True, short_list_of_cars=True)
+    streaming_data = timing_data.lets_get_timing_data()
     timing_data.write_to_json_file('class_test.json', streaming_data)
 
 
