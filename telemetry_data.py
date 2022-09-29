@@ -133,7 +133,7 @@ def merging_telemetry_with_timing_data(timing_data_file_path: str, short_list: b
     new_dict = {"streaming_data": another_big_list}
 
     # Write this new dict to a file
-    with open("class_test.json", "w") as f:
+    with open(timing_data_file_path, "w") as f:
         json.dump(new_dict, f, indent=4)
         f.write("\n")
 
