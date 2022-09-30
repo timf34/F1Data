@@ -7,8 +7,8 @@ from utils import load_json_file
 
 class ConvertDataToList:
     def __init__(self):
-        self.data_file: str = "data/stream_data.json"
-        self.new_file_name: str = "data/new_json_file.json"
+        self.data_file: str = "data/stream_data_with_lap_times.json"
+        self.new_file_name: str = "data/new_json_file_with_lap_times.json"
         self.indent: int = 2
 
     def print_info(self):
@@ -26,33 +26,36 @@ class ConvertDataToList:
 
         for i in data["streaming_data"]:
             for j in i["car_number"]:
-                # temp_list.append((j,
-                #                   i["car_number"][j]["s"],
-                #                   i["car_number"][j]["t"],
-                #                   i["car_number"][j]["b"],
-                #                   i["car_number"][j]["r"],
-                #                   i["car_number"][j]["g"],
-                #                   i["car_number"][j]["i1"],
-                #                   i["car_number"][j]["i2"],
-                #                   i["car_number"][j]["u"],
-                #                   ))
-                # Note: using list.extend so as not to create a nested structure.
                 temp_list.extend((j,
-                                  i["car_number"][j]["speed"],
-                                  i["car_number"][j]["throttle"],
-                                  str(i["car_number"][j]["brake"]),
-                                  i["car_number"][j]["rpm"],
-                                  i["car_number"][j]["gear"],
-                                  str(i["car_number"][j]["gap_to_leader"]),
-                                  str(i["car_number"][j]["gap_to_postiion_ahead"]),
-                                  i["car_number"][j]["updated"],
+                                  i["car_number"][j]["s"],
+                                  i["car_number"][j]["t"],
+                                  i["car_number"][j]["b"],
+                                  i["car_number"][j]["r"],
+                                  i["car_number"][j]["g"],
+                                  i["car_number"][j]["i1"],
+                                  i["car_number"][j]["i2"],
+                                  i["car_number"][j]["u"],
+                                  i["car_number"][j]["mostRecentLapTime"],
                                   "\n"
                                   ))
+                # Note: using list.extend so as not to create a nested structure.
+                # temp_list.extend((j,
+                #                   i["car_number"][j]["speed"],
+                #                   i["car_number"][j]["throttle"],
+                #                   str(i["car_number"][j]["brake"]),
+                #                   i["car_number"][j]["rpm"],
+                #                   i["car_number"][j]["gear"],
+                #                   str(i["car_number"][j]["gap_to_leader"]),
+                #                   str(i["car_number"][j]["gap_to_postiion_ahead"]),
+                #                   i["car_number"][j]["updated"],
+                #                   "\n"
+                #                   ))
 
             temp_list.append("timestamp")
-            temp_list.append(i["timestamp"])  # Append the timestamp to the end of the list.
+            # temp_list.append(i["timestamp"])  # Append the timestamp to the end of the list.
+            temp_list.append(i["ts"])  # Append the timestamp to the end of the list.
             big_list.append(temp_list)
-            temp_list = []
+            temp_list = []  # I should write down what this does, I think it resets the temp_list.
 
         return big_list
 
@@ -129,7 +132,6 @@ class ConvertDataToList:
         for i in range(10):
             list.extend((i, i+1))
         print(list)
-
 
 
 if __name__ == '__main__':
