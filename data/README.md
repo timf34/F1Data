@@ -42,3 +42,19 @@ write "timestamp" before it to be clear, but it can easily be accessed by `[-1]`
 `very_short_new_json_file_with_lap_times.json`
 
 - Same as the above, but a shorter version of it. 
+
+`new_json_file_with_lap_times_4fps.json`
+
+- This file contains the full dataset 
+- It is generally the same as the original file, except that the data is sampled at 4fps. 
+where we interpolated between the old 2FPS datapoints. 
+- Note: currently values that are strings in the old 2FPS dataset are still strings in this
+dataset, however the interpolated values are now all floats if they were numerical strings!
+  (i.e. "+ 1.052" is now 1.052, and "999" is now 999.0 in any of the interpolated values)
+    - I might fix this in the future, but I don't think it should matter right now. It would 
+      easiest to fix this by changing the float strings in the 2FPS dataset to floats in this 
+      new one too. 
+
+`very_short_new_json_file_with_lap_times_4fps.json`
+
+- Same as above, but a shorter version of it.
