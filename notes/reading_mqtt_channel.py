@@ -26,6 +26,8 @@ from aws_keys import ACCESS_KEY, SECRET_ACCESS_KEY
     Here is an article/ walkthrough for publishing to mqtt topics, but should bring us most of the way in 
     subscribing to them as well: 
     https://aws.amazon.com/premiumsupport/knowledge-center/iot-core-publish-mqtt-messages-python/
+    
+    And here is the repo: https://github.com/aws/aws-iot-device-sdk-python-v2
 """
 
 
