@@ -28,7 +28,7 @@ class StreamFromS3:
             return self.s3.get_object(Bucket=self.bucket, Key=self.static_info_key)
         return self.s3.get_object(Bucket=self.bucket, Key=self.key)
 
-    def print_data(self):
+    def print_data(self) -> None:
         data = self.get_data()
         print("type of data: ", type(data))
         print("data: ", data)
@@ -77,14 +77,14 @@ class StreamFromS3:
             if self.short_loop and count == self.debugging_timout:
                 break
 
-    def publish_to_arduino(self, data: Dict):
+    def publish_to_arduino(self, data: Dict) -> None:
         response = self.iot_client.publish(
             topic=self.topic,
             qos=1,
             payload=str(data)
         )
 
-    def work_with_data(self):
+    def work_with_data(self) -> None:
         data = self.get_data()
         print(data)
         print(type(data["Body"]))
