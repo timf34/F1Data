@@ -4,6 +4,8 @@ from typing import Dict, List
 
 from utils import load_json_file
 
+# Note: I could put `convert_to_4fps` and `convert_data_to_list` into one file.
+
 
 class ConvertDataToList:
     def __init__(self):

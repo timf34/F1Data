@@ -11,6 +11,8 @@ from typing import List
 # It is very messy code and I don't plan to clean it up as I really shouldn't need to use it again anytime soon.
 
 
+# Note: I could put `convert_to_4fps` and `convert_data_to_list` into one file.
+
 class ConvertTo4FPS:
     def __init__(self):
         self.path_to_data: str = "data/very_short_new_json_file_with_lap_times.json"
