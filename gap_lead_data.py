@@ -70,6 +70,7 @@ class GapLeadData:
 
         stats = {"car_number": {}}
 
+        # Initializing the dict with the car numbers
         for number in self.list_of_car_numbers:
             if number not in stats["car_number"]:
                 stats["car_number"][str(number)] = {"i1": "999",
@@ -96,6 +97,7 @@ class GapLeadData:
                 # Reinitialize the updated_cars list
                 updated_cars = []
 
+            # This is the code to fill in gaps in the timing data (i.e. 1.5, 2.5 -> 1.5, 2.0, 2.5)
             total_seconds = math.floor(row['Time'].total_seconds())
             if not less_than_half:
                 total_seconds += 0.5
