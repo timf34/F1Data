@@ -22,6 +22,10 @@ from aws_keys import ACCESS_KEY, SECRET_ACCESS_KEY
     etc.
     
     It would also be super useful for adding tests, to help ensure that the code is working correctly. 
+    
+    Here is an article/ walkthrough for publishing to mqtt topics, but should bring us most of the way in 
+    subscribing to them as well: 
+    https://aws.amazon.com/premiumsupport/knowledge-center/iot-core-publish-mqtt-messages-python/
 """
 
 
