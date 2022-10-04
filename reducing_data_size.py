@@ -7,7 +7,8 @@ from config import (
     TEST_CASE_SINGLE_TIMESTAMP_TWENTY_CARS_LIST,
     TEST_CASE_SINGLE_TIMESTAMP_TWO_CARS_LIST,
     TEST_CASE_SINGLE_TIMESTAMP_TWENTY_CARS_LIST_2D,
-    NEW_LIST_STRUCTURE
+    NEW_LIST_STRUCTURE,
+    NEW_LIST_WITH_LAP_TIMES,
 )
 
 
@@ -24,6 +25,7 @@ class LetsTestJsonReductionStuff(object):
         self.test4 = TEST_CASE_SINGLE_TIMESTAMP_TWENTY_CARS_LIST
         self.test5 = TEST_CASE_SINGLE_TIMESTAMP_TWENTY_CARS_LIST_2D
         self.test6 = NEW_LIST_STRUCTURE
+        self.test7 = NEW_LIST_WITH_LAP_TIMES
 
     def test_sizes(self):
         for i in range(1, len(self.__dict__.keys()) + 1):
