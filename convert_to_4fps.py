@@ -15,8 +15,8 @@ from typing import List
 
 class ConvertTo4FPS:
     def __init__(self):
-        self.path_to_data: str = "data/very_short_new_json_file_with_lap_times.json"
-        self.path_to_output: str = "data/very_short_new_json_file_with_lap_times_4fps.json"
+        self.path_to_data: str = "data/new_json_file_with_lap_times.json"
+        self.path_to_output: str = "data/new_json_file_with_lap_times_4fps.json"
         self.data = self.load_json()
         # self.samp_data = {"streaming_data" : [[1, 2, "NaN", 3, "timestamp", 5], [3, 4, 69, 5, "timestamp", 5.5], [5, 6, "yolo", 7, "timestamp", 6]]}
 
@@ -56,8 +56,13 @@ class ConvertTo4FPS:
                         # except ValueError:
                         #     new_data.append((v1 + v2) / 2)
 
-                        interpolated_value = (v1 + v2) / 2
-                        new_data.append(interpolated_value)
+                        if v1 == 999 and v2 != 999:
+                            new_data.append(v2)
+                        elif v2 == 999 and v1 != 999:
+                            new_data.append(v1)
+                        else:
+                            interpolated_value = (v1 + v2) / 2
+                            new_data.append(round(interpolated_value, 2))
                     else:
                         new_data.append(v1)
                 self.data["streaming_data"].insert(index + 1, new_data)
