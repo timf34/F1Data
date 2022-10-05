@@ -54,6 +54,10 @@ dataset, however the interpolated values are now all floats if they were numeric
     - I might fix this in the future, but I don't think it should matter right now. It would 
       easiest to fix this by changing the float strings in the 2FPS dataset to floats in this 
       new one too. 
+    - The values for which this occurs are the 'car_numbers' and the 'gap_lead_times', which are 
+      in indices 0, 6 and 7. 
+- Note: I have converted the NaN values to "nan" within this dataset and the `very_short...` 
+  version of it.
 
 `very_short_new_json_file_with_lap_times_4fps.json`
 
